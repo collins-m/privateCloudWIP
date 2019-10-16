@@ -1,55 +1,67 @@
 # School of Computing &mdash; Year 4 Project Proposal Form
 
-> Edit (then commit and push) this document to complete your proposal form.
-> Make use of figures / diagrams where appropriate.
->
-> Do not rename this file.
+
 
 ## SECTION A
 
-|                     |                   |
-|---------------------|-------------------|
-|Project Title:       | xxxxxx            |
-|Student 1 Name:      | xxxxxx            |
-|Student 1 ID:        | xxxxxx            |
-|Student 2 Name:      | xxxxxx            |
-|Student 2 ID:        | xxxxxx            |
-|Project Supervisor:  | xxxxxx            |
+### Project Creator Details
 
-> Ensure that the Supervisor formally agrees to supervise your project; this is only recognised once the
-> Supervisor assigns herself/himself via the project Dashboard.
->
-> Project proposals without an assigned
-> Supervisor will not be accepted for presentation to the Approval Panel.
+| Project Title:      | TwoDrive        |
+| ------------------- | --------------- |
+| Student 1 Name:     | Michael Collins |
+| Student 1 ID:       | 16313231        |
+| Student 2 Name:     | xxxxxx          |
+| Student 2 ID:       | xxxxxx          |
+| Project Supervisor: | Stephen Blott   |
+
+
 
 ## SECTION B
 
-> Guidance: This document is expected to be approximately 3 pages in length, but it can exceed this page limit.
-> It is also permissible to carry forward content from this proposal to your later documents (e.g. functional
-> specification) as appropriate.
->
-> Your proposal must include *at least* the following sections.
+
 
 
 ### Introduction
 
 > Describe the general area covered by the project.
 
+TwoDrive is a project that aims to cover topics including _private cloud technology_, _file system storage solutions_, _cryptography_, and _RESTful APIs_. Our aim for the development cycle is to employ a test-driven development approach to ensure a robust product from start to finish and to keep track of our progress using tools such as Git and Trello.
+
 ### Outline
 
 > Outline the proposed project.
+
+The purpose of TwoDrive is to provide a centralized, easy-to-use, First-Party private cloud solution for DCU students and faculty. We plan to achieve this by having a desktop client that automatically synchronises specified file systems to the cloud to provide back-ups, while also allowing the files to be accessed from any machine the user wishes. The user may access their files from a web client, and they may also upload/download other files of their choosing to the cloud with the assurance that their data is stored securely and safely on the premises of DCU.
+
+We are currently proposing two clients, one for the desktop to synchronise files, and another on the web where a user may view, add, and remove files of their choosing. Given that we cannot have access to DCU's servers to install this ourselves, we are going to include an installation process that would assist a server admin in setting up the application. This will not hinder our project itself, as a proof of concept will still be presented by substituting DCU's server with another machine.
 
 ### Background
 
 > Where did the ideas come from?
 
+The idea for TwoDrive came from our shared distrust of Third-Party applications. With the rise of Third-Party authentication, cloud solutions, and applications in general there is an often overlooked fact that we as consumers are trusting our identities and our data with companies that we really have no reason to trust.
+
+We knew pretty early what our problem was, but we were unsure as to what avenue we would like to pursue for our solution. We initially thought of tackling the issue of trusting our identities with Third-Party applications (e.g. signing in with Facebook using OAuth 2.0). However, after some research we saw that companies such as Microsoft and IBM have their greatest minds theorizing about solutions to the same problem, and this led us to look at what we can do about our data.
+
+We are all familiar with Google Drive, Dropbox, and similar products. They do their job, but there is the ever-present security issues that come with these platforms. The companies have access to our data, and may view things that we wish to keep private. Furthermore, we are not in control of the availability of our data. Whether or not our data is there tomorrow, or our accounts for that matter is in control of the companies that we are entrusting with our data. This is what led us to the idea of TwoDrive.
+
+We wanted to develop a solution that put the control of the data back in the users' hands. Taking DCU as the example, we wanted to develop a storage solution that fulfilled the same requirements as the aforementioned products without the caveat of trusting a Third-Party entity. We wanted privacy to be normalized in our digital lives as it is in our everyday lives.
+
 ### Achievements
 
 > What functions will the project provide? Who will the users be?
 
+The main function that the project will provide is that of a storage solution that is not bound by location or by the storage capacity of the users' hard-drives. Using asymmetrical cryptography, we also plan to achieve a truly private cloud experience for the users.
+
+These users may be anybody; We plan to include an installation guide with the project, thus allowing anybody to set up the application on their own machine. This will give full privacy and autonomy over one's data to anyone who can spare the time to set it up. We are marketing the project towards DCU as a whole as it may be easily white-labelled under DCU, and thus the users would be DCU students and faculty members, or whoever DCU would deem a user under their own advisement.
+
 ### Justification
 
 > Why/when/where/how will it be useful?
+
+Sticking with the idea of the application being white-labelled and installed on DCU's servers, the application will be useful because it provides functionality similar to well-known cloud platforms without the unnecessary element of trust. While DCU undoubtedly has their own storage solutions, this provides a central location for users to access all of their relevant data and work. This may range from pictures with their friends taken in NuBar, to sensitive information that a user would prefer not to store outside DCU's premises.
+
+We believe that the platform would see most of its active usage during the academic year, with a lot of the holiday periods being primarily used for cold-storage purposes. The advantages of our solution as opposed to something like the H: Drives found in DCU's computer labs is TwoDrive's portability. Our solution also has advantages over Third-Party cloud platforms, namely its First-Party nature, but also that it may be integrated into DCU's other applications after the fact, perhaps for assignment submissions or other such works.
 
 ### Programming language(s)
 
@@ -81,14 +93,5 @@
 
 #### Student 2
 
-> *Student 2 should complete this section.*
+> *Student 2 should complete this section.
 
-## Example
-
-> Example: Here's how you can include images in markdown documents...
-
-<!-- Basically, just use HTML! -->
-
-<p align="center">
-  <img src="./res/cat.png" width="300px">
-</p>
