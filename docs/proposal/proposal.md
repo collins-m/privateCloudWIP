@@ -54,19 +54,21 @@ We believe that the platform would see most of its active users during the acade
 
 ### Programming language(s)
 
-> List the proposed language(s) to be used.
+The project will be written using JavaScript.
 
 ### Programming tools / Tech stack
 
-> Describe the compiler, database, web server, etc., and any other software tools you plan to use.
+Starting with the back-end, we propose using _Cassandra_ for the database layer due to its focus on availability. For the API and server we will be using a standard _NodeJS_ and _Express_ setup, as it is expandable and reliable. We have a number of front-end technologies that we seek to use. We suggest using _Electron_ for this, as it is a clean and widely used tool for desktop clients. For the web application, we suggest a _React-Redux_ setup, as it is one of the most widely used web-client tools and thus has ample support and extensions. _React Native_ is also useful for making sites accessible on phones. We also wish to use _Docker_ to virtualize the setup, and increase availability of the application through the use of features such as snapshots.
 
 ### Hardware
 
-> Describe any non-standard hardware components which will be required.
+_n/a_
 
 ### Learning Challenges
 
 > List the main new things (technologies, languages, tools, etc) that you will have to learn.
+
+Using Docker is a new experience for us both, as are the front-end technologies that are listed above, yet we plan to overcome this using online resources such as blogs, forums, and videos.
 
 ### Breakdown of work
 
