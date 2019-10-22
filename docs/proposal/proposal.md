@@ -18,8 +18,6 @@
 
 ## SECTION B
 
-
-
 ### Introduction
 
 TwoDrive is a project that aims to cover topics including *private cloud technology*, *file system storage solutions*, *cryptography*, and *RESTful APIs*. Our aim for the development cycle is to employ a test-driven development approach to ensure a robust product from start to finish and to keep track of our progress using tools such as Git and Trello.
@@ -44,7 +42,7 @@ We wanted to develop a solution that put the control of the data back in the use
 
 The main function that the project will provide is that of a storage solution that is not bound by location or by the storage capacity of the users' hard-drives. Using asymmetrical cryptography, we also plan to achieve a truly private cloud experience for the users.
 
-These users may be anybody; We plan to include an installation guide with the project, thus allowing anybody to set up the application on their machine. This will give full privacy and autonomy over one's data to anyone who can spare the time to set it up. We are marketing the project towards DCU as a whole as it may be easily white-labelled under DCU, and thus the users would be DCU students and faculty members, or whoever DCU would deem a user under their advisement.
+These users may be anybody; We plan to include an installation guide with the project, thus allowing anybody to set up the application on their machine. This will give full privacy and autonomy over one's data to anyone who can spare the time to set it up. We are marketing the project towards DCU as a whole as it may be easily white-labelled under DCU, and thus the users would be DCU students and faculty members, or whomever DCU would deem a user under their advisement.
 
 ### Justification
 
@@ -54,33 +52,30 @@ We believe that the platform would see most of its active users during the acade
 
 ### Programming language(s)
 
-The project will be written using JavaScript.
+The project will be written using a full JavaScript stack. We will use Cassandra for our database, and we will implement Docker for virtualisation.
 
 ### Programming tools / Tech stack
 
-Starting with the back-end, we propose using _Cassandra_ for the database layer due to its focus on availability. For the API and server we will be using a standard _NodeJS_ and _Express_ setup, as it is expandable and reliable. We have a number of front-end technologies that we seek to use. We suggest using _Electron_ for this, as it is a clean and widely used tool for desktop clients. For the web application, we suggest a _React-Redux_ setup, as it is one of the most widely used web-client tools and thus has ample support and extensions. _React Native_ is also useful for making sites accessible on phones. We also wish to use _Docker_ to virtualize the setup, and increase availability of the application through the use of features such as snapshots.
+Starting with the back-end, we propose using *Cassandra* for the database layer due to its focus on availability. For the API and server, we will be using a standard *NodeJS* and *Express* setup, as it is expandable and reliable. We have several front-end technologies that we seek to use. We suggest using *Electron* for this, as it is a clean and widely used tool for desktop clients. For the web application, we suggest a *React-Redux* setup, as it is one of the most widely used web-client tools and thus has ample support and extensions. *React Native* is also useful for making sites accessible on phones. We also wish to use *Docker* to virtualize the setup and increase the availability of the application through the use of features such as snapshots.
 
 ### Hardware
 
-_n/a_
+We do not plan to use any hardware during our project. Testing and development will be done on our machines.
 
 ### Learning Challenges
-
-> List the main new things (technologies, languages, tools, etc) that you will have to learn.
 
 Using Docker is a new experience for us both, as are the front-end technologies that are listed above, yet we plan to overcome this using online resources such as blogs, forums, and videos.
 
 ### Breakdown of work
 
-> Clearly identify who will undertake which parts of the project.
->
-> It must be clear from the explanation of this breakdown of work both that each student is responsible for separate, clearly-defined tasks, and that those responsibilities substantially cover all of the work required for the project.
-
 #### Student 1
 
-> *Student 1 should complete this section.*
+Student 1 will be responsible for the majority of the back-end, this includes the database, the APIs, and server-side operations. They will also be responsible for Docker implementation, and the cryptography tools used on the files. They will ensure that availability and security are top priorities.
 
 #### Student 2
 
-> *Student 2 should complete this section.*
+Student 2 will be responsible for most of the front-end, this includes the multiple clients and the user experience. They will be responsible for creating a clean user interface and connecting this with the back-end APIs. They will ensure that usability and security are top priorities.
 
+#### Students 1 & 2
+
+Both students will help each other with their respective roles where suitable and will work together on implementing an installer, and all necessary documentation, etc.
