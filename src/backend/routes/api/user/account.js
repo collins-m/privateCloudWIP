@@ -21,7 +21,7 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
 */
 router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 
-    User.remove({ email: req.body.email }, (err) => {
+    User.deleteOne({ email: req.body.email }, (err) => {
         if(err){
             throw err;
         }
