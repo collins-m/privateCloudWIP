@@ -11,7 +11,9 @@ const router = express.Router();
 * @return {[JSON]} [user object]
 */
 router.get('/:id', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-    res.json({user: req.user});
+    return res
+        .status(200)
+        .json({user: req.user});
 });
 
 /**
@@ -25,7 +27,9 @@ router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res, 
         if(err){
             throw err;
         }
-        res.json({
+        return res
+            .status(200)
+            .json({
             success: true,
             msg: 'User has now been deleted'
         });

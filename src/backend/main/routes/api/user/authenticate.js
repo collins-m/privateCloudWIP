@@ -19,7 +19,9 @@ router.post('/authenticate', (req, res, next) => {
     User.getUserByEmail(email, (err, user) => {
         if(err) throw err;
         if(!user){
-            return res.json({success: false, msg: 'User not found'});
+            return res
+                .status(404)
+                .json({success: false, msg: 'User not found'});
         }
 
         // compare provided password with one in DB
@@ -30,7 +32,9 @@ router.post('/authenticate', (req, res, next) => {
                     expiresIn: 86400 // 24 hours in seconds
                 });
 
-                res.json({
+                return res
+                    .status(200)
+                    .json({
                     success: true,
                     msg: 'Login successful',
                     token: 'bearer ' + token,
@@ -42,7 +46,9 @@ router.post('/authenticate', (req, res, next) => {
                     }
                 });
             } else {
-                return res.json({success: false, msg: 'Wrong password'});
+                return res
+                    .status(400)
+                    .json({success: false, msg: 'Wrong password'});
             }
         });
     });
