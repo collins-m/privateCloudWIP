@@ -1,3 +1,5 @@
+// sample test to ensure working
+
 const test = require('ava');
 
 test('foo', t => {
