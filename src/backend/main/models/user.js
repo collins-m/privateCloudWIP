@@ -53,9 +53,12 @@ module.exports.getUserByEmail = function(email, callback){
 module.exports.addUser = function(newUser, callback){
     bcryptjs.genSalt(10, (err, salt) => {
         bcryptjs.hash(newUser.password, salt, (err, hash) => {
-            if(err) throw err;
-            newUser.password = hash;
-            newUser.save(callback);
+            try {
+                newUser.password = hash;
+                newUser.save(callback);
+            } catch (err) {
+                throw err;
+            }
         });
     });
 }
@@ -68,7 +71,10 @@ module.exports.addUser = function(newUser, callback){
 */
 module.exports.comparePassword = function(attempt, hash, callback){
     bcryptjs.compare(attempt, hash, (err, isMatch) => {
-        if(err) throw err;
-        callback(null, isMatch);
+        try {
+            callback(null, isMatch);
+        } catch (err) {
+            throw err;
+        }
     });
 }

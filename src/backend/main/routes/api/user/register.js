@@ -20,10 +20,16 @@ router.post('/register', (req, res, next) => {
     // attempt to add user
     User.addUser(newUser, (err, user) => {
         if (err) {
-            console.log(err)
-            return res
-                .status(409)
-                .json({success: false, msg: 'Failed to register user'});
+            console.log(err.name);
+            if (err.name == "ValidationError") {
+                return res
+                .status(400)
+                .json({success: false, msg: 'All fields must be filled'});
+            } else {
+                return res
+                    .status(409)
+                    .json({success: false, msg: 'Failed to register user'});
+            }
         }
         else {
             return res
