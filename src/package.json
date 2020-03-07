@@ -1,11 +1,11 @@
 {
-  "name": "xDrive-backend",
+  "name": "xdrive",
   "version": "1.0.0",
-  "description": "API for private cloud solution",
-  "main": "main/app.js",
+  "description": "private cloud solution",
+  "main": "index.js",
   "scripts": {
     "test": "ava",
-    "start": "node main/app"
+    "start": "node index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
