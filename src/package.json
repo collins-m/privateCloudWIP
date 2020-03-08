@@ -4,7 +4,7 @@
   "description": "private cloud solution",
   "main": "index.js",
   "scripts": {
-    "test": "ava",
+    "test": "mocha */test/**/*.js --recursive",
     "start": "node index.js"
   },
   "dependencies": {
@@ -18,7 +18,9 @@
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "ava": "^3.5.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^7.1.0",
     "nodemon": "^2.0.2"
   },
   "author": "Michael",

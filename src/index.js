@@ -37,6 +37,8 @@ app.get('/', (req, res) => {
 });
 
 // start server
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log('Node server started on port ' + port)
 });
+
+module.exports = server;
