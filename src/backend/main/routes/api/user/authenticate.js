@@ -7,18 +7,18 @@ const User = require('../../../models/user');
 const router = express.Router();
 
 /**
- * @api {POST} /api/user/authenticate   Authenticate User.
+ * @api {POST} /api/user/authenticate                   Authenticate User
  * @apiName AuthenticateUser
  * @apiGroup User
  * 
- * @apiParam {String} email             Mandatory email associated with account.
- * @apiParam {String} password          Mandatory password associated with account.
+ * @apiParam    (Request Body)  {String}    email       Mandatory email associated with account
+ * @apiParam    (Request Body)  {String}    password    Mandatory password associated with account
  * 
- * @apiSuccess (200) {Boolean} success  Success state of operation.
- * @apiSuccess (200) {String} msg       Description of response.
- * @apiSuccess (200) {String} token     Authorization token associated with User.
- * @apiSuccess (200) {String} id        ID associated with User
- * @apiSuccess (200) {JSON} user        User object containing firstname, surname, and email.
+ * @apiSuccess  (200 Response)  {Boolean}   success     Success state of operation
+ * @apiSuccess  (200 Response)  {String}    msg         Description of response
+ * @apiSuccess  (200 Response)  {String}    token       Authorization token associated with User
+ * @apiSuccess  (200 Response)  {String}    id          ID associated with User
+ * @apiSuccess  (200 Response)  {JSON}      user        User object containing firstname, surname, and email
 */
 router.post('/authenticate', (req, res, next) => {
     const email = req.body.email;

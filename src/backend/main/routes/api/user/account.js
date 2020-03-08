@@ -6,15 +6,15 @@ const User = require('../../../models/user');
 const router = express.Router();
 
 /**
- * @api {GET} /api/user/{id}            Get User.
+ * @api {GET} /api/user/{id}                        Get User
  * @apiName GetUser
  * @apiGroup User
  * 
- * @apiHeader {String} token            User's unique bearer token.
+ * @apiHeader   (Authorization) {String}    token   User's unique bearer token
  * 
- * @apiParam {String} id                Mandatory ID assocaited with User account.
+ * @apiParam    (Query Param)   {String}    id      Mandatory ID assocaited with User account
  * 
- * @apiSuccess (200) {JSON} user        User object.
+ * @apiSuccess  (200 Response)  {JSON}      user    User object
 */
 router.get('/:id', passport.authenticate('jwt', {session:false}), (req, res, next) => {
     return res
@@ -23,16 +23,16 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
 });
 
 /**
- * @api {DELETE} /api/user/{id}         Delete User.
+ * @api {DELETE} /api/user/{id}                     Delete User
  * @apiName DeleteUser
  * @apiGroup User
  * 
- * @apiHeader {String} token            User's unique bearer token.
+ * @apiHeader   (Authorization) {String}    token    User's unique bearer token
  * 
- * @apiParam {String} id                Mandatory ID assocaited with User account.
+ * @apiParam    (Query Param)   {String}    id       Mandatory ID assocaited with User account
  * 
- * @apiSuccess (200) {Boolean} success  Success state of operation
- * @apiSuccess (200) {String} msg       Description of response.
+ * @apiSuccess  (200)           {Boolean}   success  Success state of operation
+ * @apiSuccess  (200)           {String}    msg      Description of response
 */
 router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 

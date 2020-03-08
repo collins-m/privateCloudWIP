@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha */test/**/*.js --recursive",
     "start": "node index.js",
-    "docs": "apidoc -i ./ -o ../docs/documentation"
+    "docs": "apidoc -i ./backend ./frontend -o ../docs/documentation"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
