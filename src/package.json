@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha */test/**/*.js --recursive",
-    "start": "node index.js",
-    "docs": "jsdoc -c jsdoc.json"
+    "start": "node index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -22,7 +21,6 @@
     "better-docs": "^1.4.7",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
-    "jsdoc": "^3.6.3",
     "mocha": "^7.1.0",
     "nodemon": "^2.0.2"
   },
