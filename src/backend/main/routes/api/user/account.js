@@ -6,9 +6,15 @@ const User = require('../../../models/user');
 const router = express.Router();
 
 /**
-* [GET account]
-* @param {[JSON]} req [request should contain 'id' path param and 'bearer' auth type]
-* @return {[JSON]} [user object]
+ * @api {GET} /api/user/{id}                        Get User
+ * @apiName GetUser
+ * @apiGroup User
+ * 
+ * @apiHeader   (Authorization) {String}    token   User's unique bearer token
+ * 
+ * @apiParam    (Query Param)   {String}    id      Mandatory ID assocaited with User account
+ * 
+ * @apiSuccess  (200 Response)  {JSON}      user    User object
 */
 router.get('/:id', passport.authenticate('jwt', {session:false}), (req, res, next) => {
     return res
@@ -17,9 +23,16 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
 });
 
 /**
-* [DELETE account]
-* @param {[JSON]} req [request should contain 'id' path param and 'bearer' auth type]
-* @return {[JSON]} [success/failure of operation]
+ * @api {DELETE} /api/user/{id}                     Delete User
+ * @apiName DeleteUser
+ * @apiGroup User
+ * 
+ * @apiHeader   (Authorization) {String}    token    User's unique bearer token
+ * 
+ * @apiParam    (Query Param)   {String}    id       Mandatory ID assocaited with User account
+ * 
+ * @apiSuccess  (200)           {Boolean}   success  Success state of operation
+ * @apiSuccess  (200)           {String}    msg      Description of response
 */
 router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 
