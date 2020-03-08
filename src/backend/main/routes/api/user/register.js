@@ -20,7 +20,6 @@ router.post('/register', (req, res, next) => {
     // attempt to add user
     User.addUser(newUser, (err, user) => {
         if (err) {
-            console.log(err.name);
             if (err.name == "ValidationError") {
                 return res
                 .status(400)
