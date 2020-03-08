@@ -19,6 +19,13 @@ const router = express.Router();
  * @apiSuccess  (200 Response)  {String}    token       Authorization token associated with User
  * @apiSuccess  (200 Response)  {String}    id          ID associated with User
  * @apiSuccess  (200 Response)  {JSON}      user        User object containing firstname, surname, and email
+ * 
+ * @apiSuccess  (400 Response)  {Boolean}   success     Success state of operation
+ * @apiSuccess  (400 Response)  {String}    msg         Description of response
+ * 
+ * @apiSuccess  (404 Response)  {Boolean}   success     Success state of operation
+ * @apiSuccess  (404 Response)  {String}    msg         Description of response
+ * 
 */
 router.post('/authenticate', (req, res, next) => {
     const email = req.body.email;

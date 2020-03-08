@@ -63,6 +63,38 @@
             "field": "user",
             "description": "<p>User object containing firstname, surname, and email</p>"
           }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
         ]
       }
     },
@@ -227,6 +259,38 @@
           },
           {
             "group": "201 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "409 Response": [
+          {
+            "group": "409 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "409 Response",
             "type": "String",
             "optional": false,
             "field": "msg",

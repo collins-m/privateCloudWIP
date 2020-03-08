@@ -14,6 +14,12 @@ const User = require('../../../models/user');const router = express.Router();
  * 
  * @apiSuccess  (201 Response)  {Boolean}   success     Success state of operation
  * @apiSuccess  (201 Response)  {String}    msg         Description of response
+ * 
+ * @apiSuccess  (400 Response)  {Boolean}   success     Success state of operation
+ * @apiSuccess  (400 Response)  {String}    msg         Description of response
+ * 
+ * @apiSuccess  (409 Response)  {Boolean}   success     Success state of operation
+ * @apiSuccess  (409 Response)  {String}    msg         Description of response
 */
 router.post('/register', (req, res, next) => {
     // cast data as User object
