@@ -3,10 +3,17 @@ const express = require('express');
 const User = require('../../../models/user');const router = express.Router();
 
 /**
-* [POST register account]
-* @param {[JSON]} req [request should contain 'firstname', 'surname', 'email',
-*                     'password' in body]
-* @return {[JSON]} [success/failure of operation, bearer token, and user ID]
+ * @api {POST} /api/user/register       Register new user.
+ * @apiName RegisterUser
+ * @apiGroup User
+ * 
+ * @apiParam {String} firstname         Mandatory Firstname of User.
+ * @apiParam {String} surname           Mandatory Surname of User.
+ * @apiParam {String} email             Mandatory email associated with account.
+ * @apiParam {String} password          Mandatory password associated with account.
+ * 
+ * @apiSuccess (201) {Boolean} success  Success state of operation.
+ * @apiSuccess (201) {String} msg       Description of response.
 */
 router.post('/register', (req, res, next) => {
     // cast data as User object
