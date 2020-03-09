@@ -37,7 +37,7 @@ module.exports.getUserById = function(id, callback){
 
 /**
 * [find user by their email]
-* @param {[String]} id [email pertaining to user]
+* @param {[String]} email [email pertaining to user]
 * @return {[JSON]} [user object]
 */
 module.exports.getUserByEmail = function(email, callback){
