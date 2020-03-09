@@ -1,6 +1,8 @@
 const express = require('express');
 
-const User = require('../../../models/user');const router = express.Router();
+const User = require('../../../models/user');
+
+const router = express.Router();
 
 /**
  * @api {POST} /api/user/register                       Register new user
