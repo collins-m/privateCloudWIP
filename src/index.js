@@ -4,24 +4,19 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const https = require('https');
-const fs = require('fs');
-const helmet = require('helmet');
 
 const config = require('./backend/main/config/database');
 
-const options = {
-  key: fs.readFileSync('./backend/main/config/keys/93275509_xdrive.key'),
-  cert: fs.readFileSync('./backend/main/config/keys/93275509_xdrive.cert'),
-  dhparam: fs.readFileSync('./backend/main/config/keys/privateKey.key')
-}
-
 const app = express();
+
+// port variable
+const port = 3000;
 
 // database connection
 mongoose.set('useCreateIndex', true);
 mongoose
   .connect(config.database, {useNewUrlParser: true, useUnifiedTopology: true})
+  .then(() => console.log('MongoDB connected on ' + config.database))
   .catch(err => console.log(err));
 
 // middlewear
@@ -29,7 +24,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(helmet());
 
 require('./backend/main/config/passport')(passport);
 require('./backend/main/routes')(app);
@@ -43,7 +37,8 @@ app.get('/', (req, res) => {
 });
 
 // start server
-const server = app.listen(8000);
-https.createServer(options, app).listen(8080);
+const server = app.listen(port, () => {
+  console.log('Node server started on port ' + port)
+});
 
 module.exports = server;
