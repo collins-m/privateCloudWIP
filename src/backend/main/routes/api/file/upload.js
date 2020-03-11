@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
+const passport = require('passport');
 const multer = require('multer');
+const fs = require('fs');
 
 const File = require('../../../models/file');
 
@@ -8,7 +10,7 @@ const router = express.Router();
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, './public')
+      cb(null, './public/');
     },
     filename: (req, file, cb) => {
       cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
@@ -17,7 +19,18 @@ var storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post('/upload', passport.authenticate('jwt', {session:false}), upload.single('file'), (req, res, next) => {
+// function to put files in correct subdirectories
+const uploadFile = function(owner) {
+    if (!fs.existsSync('./public/' + owner)){
+        fs.mkdirSync('./pubic/' + owner);
+    }
+    // set as destination
+    upload.single('file');
+
+}
+
+
+router.post('/upload', passport.authenticate('jwt', {session:false}), (req, res, next) => {
     // cast data as File object
     let newFile = new File({
         originalFilename: req.file.originalname,
@@ -27,6 +40,8 @@ router.post('/upload', passport.authenticate('jwt', {session:false}), upload.sin
     });
 
     //attempt to add file
+    uploadFile(req.owner);
+
     File.addFile(newFile, (err, file) => {
         if (err) {
             return res
