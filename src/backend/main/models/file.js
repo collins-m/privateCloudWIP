@@ -44,7 +44,7 @@ module.exports.getFileByName = function(user, originalFilename, callback){
         user: user,
         originalFilename: originalFilename
     }
-    User.findOne(query, callback);
+    File.findOne(query, callback);
 }
 
 /**
@@ -54,4 +54,16 @@ module.exports.getFileByName = function(user, originalFilename, callback){
 */
 module.exports.addFile = function(newFile, callback){
     newFile.save(callback);
+}
+
+module.exports.deleteAllUserFiles = function(user, callback){
+    const query = {
+        owner: user
+    }
+    File.find(query, (err, files) => {
+        if (err) throw err;
+        files.forEach(file => {
+            file.remove();
+        });
+    });
 }
