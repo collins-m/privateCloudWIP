@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const rimraf = require('rimraf');
 
 const User = require('../../../models/user');
 
@@ -40,6 +41,11 @@ router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res, 
         if(err){
             throw err;
         }
+        // delete user upload folder
+        rimraf('./public/' + req.body.email, () => {
+            console.log("User folder has now been deleted");
+        });
+
         return res
             .status(200)
             .json({

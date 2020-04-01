@@ -21,9 +21,9 @@ const upload = multer({ storage: storage });
 
 // function to put files in correct subdirectories
 const uploadFile = function(owner) {
-    if (!fs.existsSync('./public/' + owner)){
-        fs.mkdirSync('./pubic/' + owner);
-    }
+//     if (!fs.existsSync('./public/' + owner)){
+//         fs.mkdirSync('./pubic/' + owner);
+//     }
     // set as destination
     upload.single('file');
 
