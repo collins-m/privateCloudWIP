@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const passport = require('passport');
 const multer = require('multer');
 const fs = require('fs');
@@ -20,46 +19,32 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage: storage })
 
-// define move operation for files
-moveFile = function(oldPath, newPath, callback) {
-    fs.rename(oldPath, newPath, function (err) {
-        if (err) {
-            if (err.code === 'EXDEV') {
-                copy();
-            } else {
-                callback(err);
-            }
-            return;
-        }
-        callback();
-    });
-
-    function copy() {
-        var readStream = fs.createReadStream(oldPath);
-        var writeStream = fs.createWriteStream(newPath);
-
-        readStream.on('error', callback);
-        writeStream.on('error', callback);
-
-        readStream.on('close', function () {
-            fs.unlink(oldPath, callback);
-        });
-
-        readStream.pipe(writeStream);
-    }
-}
-
+/**
+ * @api {POST} /api/file/upload                         Authenticate User
+ * @apiName UploadFile
+ * @apiGroup File
+ * 
+ * @apiParam    (Request Body)  {File}      file        File that user wishes to upload
+ * @apiParam    (Request Body)  {String}    owner       User email - owner of the uploaded file
+ * @apiParam    (Request Body)  {String}    passcode    User inputted password to be used in encryption/decryption of file
+ * 
+ * @apiSuccess  (201 Response)  {Boolean}   success     Success state of operation
+ * @apiSuccess  (201 Response)  {String}    msg         Description of response
+ * 
+ * @apiSuccess  (400 Response)  {Boolean}   success     Success state of operation
+ * @apiSuccess  (400 Response)  {String}    msg         Description of response
+*/
 router.post('/upload', passport.authenticate('jwt', {session:false}), upload.single('file'), (req, res, next) => {
     // cast data as File object
     let newFile = new File({
         originalFilename: req.file.originalname,
         filename: req.file.filename,
-        path: 'public/' + req.body.owner + '/' + req.file.filename,
+        path: 'public/' + req.body.owner + '/' + req.file.filename + '.enc',
         owner: req.body.owner
     });
 
     // move file to user subdirectory
-    moveFile(req.file.path, newFile.path, (err) => {
+    File.moveAndEncryptFile(req.file.path, newFile.path, req.body.cipherKey, (err) => {
         if (err) {
             console.log(err);
         }

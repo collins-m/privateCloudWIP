@@ -58,16 +58,17 @@ describe('Users', () => {
                     res.should.have.status(201);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(true);
-                });
-            // send second request
-            chai.request(server)
-                .post('/api/user/register')
-                .send(user)
-                .end((err, res) => {
-                    res.should.have.status(409);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('success').eql(false);
-                    done();
+
+                    // send second request
+                    chai.request(server)
+                    .post('/api/user/register')
+                    .send(user)
+                    .end((err, res) => {
+                        res.should.have.status(409);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property('success').eql(false);
+                        done();
+                    });
                 });
         });
 
