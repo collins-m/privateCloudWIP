@@ -2,7 +2,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/api/file/upload",
-    "title": "Authenticate User",
+    "title": "Upload File",
     "name": "UploadFile",
     "group": "File",
     "parameter": {

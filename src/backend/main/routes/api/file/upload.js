@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 /**
- * @api {POST} /api/file/upload                         Authenticate User
+ * @api {POST} /api/file/upload                         Upload File
  * @apiName UploadFile
  * @apiGroup File
  * 
