@@ -1,6 +1,9 @@
 const express = require('express');
+const fs = require('fs');
 
-const User = require('../../../models/user');const router = express.Router();
+const User = require('../../../models/user');
+
+const router = express.Router();
 
 /**
  * @api {POST} /api/user/register                       Register new user
@@ -44,6 +47,11 @@ router.post('/register', (req, res, next) => {
             }
         }
         else {
+            // create uploads folder for new user
+                if (!fs.existsSync('./public/' + newUser.email)){
+                    fs.mkdirSync('./public/' + newUser.email);
+                }
+            // return response
             return res
                 .status(201)
                 .json({success: true, msg: 'User registered'});

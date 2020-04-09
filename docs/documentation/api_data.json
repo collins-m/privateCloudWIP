@@ -1,6 +1,79 @@
 [
   {
     "type": "POST",
+    "url": "/api/file/upload",
+    "title": "Upload File",
+    "name": "UploadFile",
+    "group": "File",
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "File",
+            "optional": false,
+            "field": "file",
+            "description": "<p>File that user wishes to upload</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "owner",
+            "description": "<p>User email - owner of the uploaded file</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "passcode",
+            "description": "<p>User inputted password to be used in encryption/decryption of file</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201 Response": [
+          {
+            "group": "201 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "201 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/upload.js",
+    "groupTitle": "File"
+  },
+  {
+    "type": "POST",
     "url": "/api/user/authenticate",
     "title": "Authenticate User",
     "name": "AuthenticateUser",

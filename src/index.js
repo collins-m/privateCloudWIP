@@ -5,18 +5,15 @@ const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
 
-const config = require('./backend/main/config/database');
+const constants = require('./constants');
 
 const app = express();
-
-// port variable
-const port = 3000;
 
 // database connection
 mongoose.set('useCreateIndex', true);
 mongoose
-  .connect(config.database, {useNewUrlParser: true, useUnifiedTopology: true})
-  .then(() => console.log('MongoDB connected on ' + config.database))
+  .connect(constants.databaseName, {useNewUrlParser: true, useUnifiedTopology: true})
+  .then(() => console.log('MongoDB connected on ' + constants.databaseName))
   .catch(err => console.log(err));
 
 // middlewear
@@ -37,8 +34,8 @@ app.get('/', (req, res) => {
 });
 
 // start server
-const server = app.listen(port, () => {
-  console.log('Node server started on port ' + port)
+const server = app.listen(constants.port, () => {
+  console.log('Node server started on port ' + constants.port)
 });
 
 module.exports = server;
