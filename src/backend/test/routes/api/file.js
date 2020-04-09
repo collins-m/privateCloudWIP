@@ -66,12 +66,59 @@ describe('Files', () => {
             chai.request(server)
                 .post('/api/file/upload')
                 .field('owner', 'johndoe@mail.com')
+                .field('passcode', 'passcode')
                 .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
                 .set('Authorization', token)
                 .end((err, res) => {
                     res.should.have.status(201);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(true);
+
+                    done();
+                });
+        });
+
+        it('should fail to upload a missing file', (done) => {
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('owner', 'johndoe@mail.com')
+                .field('passcode', 'passcode')
+                .attach('file')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+
+                    done();
+                });
+        });
+
+        it('should fail to upload file with missing "owner" field', (done) => {
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+
+                    done();
+                });
+        });
+
+        it('should fail to upload file with missing "passcode" field', (done) => {
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('owner', 'johndoe@mail.com')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
 
                     done();
                 });

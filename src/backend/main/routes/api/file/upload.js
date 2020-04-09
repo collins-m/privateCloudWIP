@@ -36,30 +36,56 @@ const upload = multer({ storage: storage })
 */
 router.post('/upload', passport.authenticate('jwt', {session:false}), upload.single('file'), (req, res, next) => {
     // cast data as File object
-    let newFile = new File({
+    let newFile;
+    try {
+      newFile = new File({
         originalFilename: req.file.originalname,
         filename: req.file.filename,
         path: 'public/' + req.body.owner + '/' + req.file.filename + '.enc',
         owner: req.body.owner
-    });
-
-    // move file to user subdirectory
-    File.moveAndEncryptFile(req.file.path, newFile.path, req.body.cipherKey, (err) => {
-        if (err) {
-            console.log(err);
-        }
-    });
-
-    File.addFile(newFile, (err, file) => {
-        if (err) {
-            return res
-                .status(400)
-                .json({success: false, msg: 'Failed to upload file'});
-        }
+      });
+    } catch (TypeError) {
         return res
-            .status(201)
-            .json({success: true, msg: 'Successfully uploaded file'});
-    })
+            .status(400)
+            .json({success: false, msg: 'File missing'});
+    }
+
+    if (req.body.owner == null && req.body.passcode == null) {
+    
+        return res
+            .status(400)
+            .json({success: false, msg: 'owner field and passcode fields required'});
+    } else if (req.body.owner == null) {
+    
+        return res
+            .status(400)
+            .json({success: false, msg: 'owner field required'});
+    } else if (req.body.passcode == null) {
+    
+        return res
+            .status(400)
+            .json({success: false, msg: 'passcode field required'});
+    } else {
+    
+        // move file to user subdirectory
+        File.moveAndEncryptFile(req.file.path, newFile.path, req.body.cipherKey, (err) => {
+            if (err) {
+                console.log(err);
+            }
+        });
+
+        File.addFile(newFile, (err, file) => {
+            if (err) {
+                return res
+                    .status(400)
+                    .json({success: false, msg: 'Failed to upload file'});
+            }
+            return res
+                .status(201)
+                .json({success: true, msg: 'Successfully uploaded file'});
+        });
+    }
+
 });
 
 module.exports = router;
