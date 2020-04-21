@@ -39,12 +39,13 @@ module.exports.getFileById = function(id, callback){
 
 /**
 * [find file by user and name]
-* @param {[String]} user [user pertaining to file]
+* @param {[String]} owner [user pertaining to file]
+* @param {[String]} originalFilename [original file name as known by the user]
 * @return {[JSON]} [file object]
 */
-module.exports.getFileByName = function(user, originalFilename, callback){
+module.exports.getFileByName = function(owner, originalFilename, callback){
     const query = {
-        user: user,
+        owner: owner,
         originalFilename: originalFilename
     }
     File.findOne(query, callback);

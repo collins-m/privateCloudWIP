@@ -1,6 +1,86 @@
 [
   {
     "type": "POST",
+    "url": "/api/file/download",
+    "title": "Download File",
+    "name": "DownloadFile",
+    "group": "File",
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "fileName",
+            "description": "<p>File that user wishes to download</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "owner",
+            "description": "<p>User email - owner of the uploaded file</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "passcode",
+            "description": "<p>User inputted password to be used in encryption/decryption of file</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200 Response": [
+          {
+            "group": "200 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "File",
+            "optional": false,
+            "field": "download",
+            "description": "<p>Downloaded File</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/download.js",
+    "groupTitle": "File"
+  },
+  {
+    "type": "POST",
     "url": "/api/file/upload",
     "title": "Upload File",
     "name": "UploadFile",

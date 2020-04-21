@@ -50,12 +50,8 @@ router.post('/upload', passport.authenticate('jwt', {session:false}), upload.sin
             .json({success: false, msg: 'File missing'});
     }
 
-    if (req.body.owner == null && req.body.passcode == null) {
-    
-        return res
-            .status(400)
-            .json({success: false, msg: 'owner field and passcode fields required'});
-    } else if (req.body.owner == null) {
+    // error handling
+    if (req.body.owner == null) {
     
         return res
             .status(400)
