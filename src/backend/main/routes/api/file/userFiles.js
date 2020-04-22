@@ -5,10 +5,8 @@ const File = require('../../../models/file');
 
 const router = express.Router();
 
-// TODO: change documentation
-
 /**
- * @api {GET} /api/file/                                Get User Files
+ * @api {GET} /api/file                                 Get User Files
  * @apiName GetFiles
  * @apiGroup File
  * 

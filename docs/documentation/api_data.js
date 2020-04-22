@@ -1,7 +1,7 @@
 define({ "api": [
   {
     "type": "GET",
-    "url": "/api/file/",
+    "url": "/api/file",
     "title": "Get User Files",
     "name": "GetFiles",
     "group": "File",
@@ -136,6 +136,101 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "backend/main/routes/api/file/upload.js",
     "groupTitle": "File"
+  },
+  {
+    "type": "POST",
+    "url": "/api/folder/create",
+    "title": "Create User Folder",
+    "name": "GetFolders",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "folderName",
+            "description": "<p>Name of folder</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>Path of folder (beigins with user email address as root)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201 Response": [
+          {
+            "group": "201 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "201 Response",
+            "type": "Array",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "409 Response": [
+          {
+            "group": "409 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "409 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/create.js",
+    "groupTitle": "Folder"
   },
   {
     "type": "POST",

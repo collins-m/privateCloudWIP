@@ -4,6 +4,7 @@ const rimraf = require('rimraf');
 
 const User = require('../../../models/user');
 const File = require('../../../models/file');
+const Folder = require('../../../models/folder');
 
 const router = express.Router();
 
@@ -41,24 +42,25 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
 */
 router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 
-    User.deleteOne({ email: req.body.email }, (err) => {
+    User.deleteOne({ email: req.user.email }, (err) => {
         if(err){
             throw err;
         }
         // delete user upload folder
-        rimraf('./public/' + req.body.email, () => {
+        rimraf('./public/' + req.user.email, () => {
 
             // delete file collection entries associated with user
-            File.deleteAllUserFiles(req.body.email, (err) => {
+            File.deleteAllUserFiles(req.user.email, (err) => {
                 if (err) throw err;
             });
-
+            // delete folder collection entries associated with user
+            Folder.deleteAllUserFolders(req.user.email, (err) => {
+                if (err) throw err;
+            });
+            // return response
             return res
                 .status(200)
-                .json({
-                success: true,
-                msg: 'User has now been deleted'
-            });
+                .json({success: true, msg: 'User has now been deleted'});
         });
     });
 });

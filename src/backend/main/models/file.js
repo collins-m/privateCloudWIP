@@ -40,6 +40,7 @@ module.exports.getFileById = function(id, callback){
 /**
 * [find file by user and name]
 * @param {[String]} user [user pertaining to file]
+* @param {[String]} originalFilename [file name as known by the user]
 * @return {[JSON]} [file object]
 */
 module.exports.getFileByName = function(user, originalFilename, callback){

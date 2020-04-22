@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 
 const User = require('../../../models/user');
+const Folder = require('../../../models/folder');
 
 const router = express.Router();
 
@@ -48,9 +49,19 @@ router.post('/register', (req, res, next) => {
         }
         else {
             // create uploads folder for new user
-                if (!fs.existsSync('./public/' + newUser.email)){
-                    fs.mkdirSync('./public/' + newUser.email);
-                }
+            if (!fs.existsSync('./public/' + newUser.email)){
+                fs.mkdirSync('./public/' + newUser.email);
+            }
+            // create folder entry for user
+            let newFolder = new Folder({
+                folderName: newUser.email,
+                path: newUser.email,
+                owner: newUser.email
+            });
+            Folder.addFolder(newFolder, (err, folder) => {
+                if (err) throw err;
+            });
+            
             // return response
             return res
                 .status(201)
