@@ -51,6 +51,18 @@ module.exports.getFileByName = function(user, originalFilename, callback){
 }
 
 /**
+* [find files by user]
+* @param {[String]} user [user pertaining to files]
+* @return {[JSON]} [file objects]
+*/
+module.exports.getFilesByUser = function(user, callback){
+    const query = {
+        owner: user,
+    }
+    File.find(query, callback);
+}
+
+/**
 * [add a new file]
 * @param {[File]} newFile [File object as per above schema]
 * @return {[JSON]} [success/failure]
@@ -64,7 +76,7 @@ module.exports.addFile = function(newFile, callback){
  * @param {[String]} user [String denoting the associated user's email]
  * @return {[null]}
  */
-module.exports.deleteAllUserFiles = function(user, callback){
+module.exports.deleteAllUserFiles = function(user){
     const query = {
         owner: user
     }

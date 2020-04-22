@@ -1,10 +1,82 @@
 [
   {
+    "type": "GET",
+    "url": "/api/file/",
+    "title": "Get User Files",
+    "name": "GetFiles",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200 Response": [
+          {
+            "group": "200 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "Array",
+            "optional": false,
+            "field": "files",
+            "description": "<p>Array of user's files</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/userFiles.js",
+    "groupTitle": "File"
+  },
+  {
     "type": "POST",
     "url": "/api/file/upload",
     "title": "Upload File",
     "name": "UploadFile",
     "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Request Body": [
@@ -14,13 +86,6 @@
             "optional": false,
             "field": "file",
             "description": "<p>File that user wishes to upload</p>"
-          },
-          {
-            "group": "Request Body",
-            "type": "String",
-            "optional": false,
-            "field": "owner",
-            "description": "<p>User email - owner of the uploaded file</p>"
           },
           {
             "group": "Request Body",
@@ -177,7 +242,7 @@
   },
   {
     "type": "DELETE",
-    "url": "/api/user/{id}",
+    "url": "/api/user/",
     "title": "Delete User",
     "name": "DeleteUser",
     "group": "User",
@@ -190,19 +255,6 @@
             "optional": false,
             "field": "token",
             "description": "<p>User's unique bearer token</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Query Param": [
-          {
-            "group": "Query Param",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p>Mandatory ID assocaited with User account</p>"
           }
         ]
       }
@@ -233,7 +285,7 @@
   },
   {
     "type": "GET",
-    "url": "/api/user/{id}",
+    "url": "/api/user/",
     "title": "Get User",
     "name": "GetUser",
     "group": "User",
@@ -246,19 +298,6 @@
             "optional": false,
             "field": "token",
             "description": "<p>User's unique bearer token</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Query Param": [
-          {
-            "group": "Query Param",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p>Mandatory ID assocaited with User account</p>"
           }
         ]
       }

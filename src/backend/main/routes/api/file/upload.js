@@ -24,8 +24,9 @@ const upload = multer({ storage: storage })
  * @apiName UploadFile
  * @apiGroup File
  * 
+ * @apiHeader   (Authorization) {String}    token       User's unique bearer token
+ * 
  * @apiParam    (Request Body)  {File}      file        File that user wishes to upload
- * @apiParam    (Request Body)  {String}    owner       User email - owner of the uploaded file
  * @apiParam    (Request Body)  {String}    passcode    User inputted password to be used in encryption/decryption of file
  * 
  * @apiSuccess  (201 Response)  {Boolean}   success     Success state of operation
@@ -41,8 +42,8 @@ router.post('/upload', passport.authenticate('jwt', {session:false}), upload.sin
       newFile = new File({
         originalFilename: req.file.originalname,
         filename: req.file.filename,
-        path: 'public/' + req.body.owner + '/' + req.file.filename + '.enc',
-        owner: req.body.owner
+        path: 'public/' + req.user.email + '/' + req.file.filename + '.enc',
+        owner: req.user.email
       });
     } catch (TypeError) {
         return res
@@ -50,17 +51,7 @@ router.post('/upload', passport.authenticate('jwt', {session:false}), upload.sin
             .json({success: false, msg: 'File missing'});
     }
 
-    if (req.body.owner == null && req.body.passcode == null) {
-    
-        return res
-            .status(400)
-            .json({success: false, msg: 'owner field and passcode fields required'});
-    } else if (req.body.owner == null) {
-    
-        return res
-            .status(400)
-            .json({success: false, msg: 'owner field required'});
-    } else if (req.body.passcode == null) {
+    if (req.body.passcode == null) {
     
         return res
             .status(400)
