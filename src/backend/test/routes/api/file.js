@@ -94,21 +94,6 @@ describe('Files', () => {
                 });
         });
 
-        it('should fail to upload file with missing "owner" field', (done) => {
-            chai.request(server)
-                .post('/api/file/upload')
-                .field('passcode', 'passcode')
-                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
-                .set('Authorization', token)
-                .end((err, res) => {
-                    res.should.have.status(400);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('success').eql(false);
-
-                    done();
-                });
-        });
-
         it('should fail to upload file with missing "passcode" field', (done) => {
             chai.request(server)
                 .post('/api/file/upload')
@@ -119,6 +104,51 @@ describe('Files', () => {
                     res.should.have.status(400);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(false);
+
+                    done();
+                });
+        });
+    });
+
+    context('get user files use cases', () => {
+        it('should return an array of user\'s files', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('owner', 'johndoe@mail.com')
+                .field('passcode', 'passcode')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            done();
+                        });
+                });
+        });
+
+        it('should return an empty array', (done) => {
+            // attempt to get file array
+            chai.request(server)
+                .get('/api/file')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    res.body.should.have.property('files').with.lengthOf(0);
 
                     done();
                 });

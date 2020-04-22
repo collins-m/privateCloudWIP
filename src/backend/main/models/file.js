@@ -76,7 +76,7 @@ module.exports.addFile = function(newFile, callback){
  * @param {[String]} user [String denoting the associated user's email]
  * @return {[null]}
  */
-module.exports.deleteAllUserFiles = function(user, callback){
+module.exports.deleteAllUserFiles = function(user){
     const query = {
         owner: user
     }

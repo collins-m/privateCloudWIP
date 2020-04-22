@@ -8,35 +8,37 @@ const router = express.Router();
 // TODO: change documentation
 
 /**
- * @api {POST} /api/file/upload                         Upload File
- * @apiName UploadFile
+ * @api {GET} /api/file/                                Get User Files
+ * @apiName GetFiles
  * @apiGroup File
  * 
- * @apiParam    (Request Body)  {File}      file        File that user wishes to upload
- * @apiParam    (Request Body)  {String}    owner       User email - owner of the uploaded file
- * @apiParam    (Request Body)  {String}    passcode    User inputted password to be used in encryption/decryption of file
+ * @apiHeader   (Authorization) {String}    token       User's unique bearer token
  * 
- * @apiSuccess  (201 Response)  {Boolean}   success     Success state of operation
- * @apiSuccess  (201 Response)  {String}    msg         Description of response
+ * @apiSuccess  (200 Response)  {Boolean}   success     Success state of operation
+ * @apiSuccess  (200 Response)  {Array}     files       Array of user's files
  * 
  * @apiSuccess  (400 Response)  {Boolean}   success     Success state of operation
  * @apiSuccess  (400 Response)  {String}    msg         Description of response
 */
-router.get('/:user', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-    // error handling
-    if (!req.query.user) {
-        return res
-            .status(400)
-            .json({success: false, msg: 'No user specified'});
-    }
-
+router.get('/', passport.authenticate('jwt', {session:false}), (req, res, next) => {
     // get all files pertaining to a user
-    File.getFilesByUser(req.query.user, (err, files) => {
+    File.getFilesByUser(req.user.email, (err, files) => {
         if (err) throw err;
 
+        // format response
+        let fileArray = [];
+        files.forEach(file => {
+            const path = file.path.split('/').slice(1, -1).join('/') + '/' + file.originalFilename;
+            fileArray.push({
+                filename: file.originalFilename,
+                path: path
+            });
+        });
+
+        // return files
         return res
             .status(200)
-            .json({files: files});
+            .json({success: true, files: fileArray});
     });
 });
 
