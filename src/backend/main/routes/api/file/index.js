@@ -4,4 +4,7 @@ const FileRouter = require('express').Router();
 FileRouter.route('/upload')
   .post(require('./upload.js'));
 
+FileRouter.route('/:user')
+  .get(require('./userFiles.js'));
+
 module.exports = FileRouter;
