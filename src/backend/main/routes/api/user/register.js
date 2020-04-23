@@ -52,15 +52,6 @@ router.post('/register', (req, res, next) => {
             if (!fs.existsSync('./public/' + newUser.email)){
                 fs.mkdirSync('./public/' + newUser.email);
             }
-            // create folder entry for user
-            let newFolder = new Folder({
-                folderName: newUser.email,
-                path: newUser.email,
-                owner: newUser.email
-            });
-            Folder.addFolder(newFolder, (err, folder) => {
-                if (err) throw err;
-            });
             
             // return response
             return res
