@@ -71,12 +71,23 @@ module.exports.addFolder = function(newFolder, callback){
 
 /**
 * [update folder path]
-* @param {[Document]} file [Folder in question]
+* @param {[Document]} folder [Folder in question]
 * @param {[String]} newPath [new path of folder]
 * @return {[JSON]} [success/failure]
 */
 module.exports.updatePath = function(folder, newPath, callback){
     folder.path = newPath;
+    folder.save(callback);
+}
+
+/**
+* [update folder name]
+* @param {[Document]} folder [Folder in question]
+* @param {[String]} newName [new name of folder]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.updateName = function(folder, newName, callback){
+    folder.folderName = newName;
     folder.save(callback);
 }
 

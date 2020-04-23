@@ -6,14 +6,15 @@ const Folder = require('../../../models/folder');
 const router = express.Router();
 
 /**
- * @api {PUT} /api/folder/{id}                          Move Folder
- * @apiName MoveFolder
+ * @api {PUT} /api/folder/{id}                          Update Folder
+ * @apiName UpdateFolder
  * @apiGroup Folder
  * 
  * @apiHeader   (Authorization) {String}    token       User's unique bearer token
  * 
  * @apiParam    (Request Body)  {String}    oldPath    Path that foler is currently located
- * @apiParam    (Request Body)  {String}    newPath    Path that user wishes to move folder to
+ * @apiParam    (Request Body)  {String}    [newPath]  Path that user wishes to move folder to
+ * @apiParam    (Request Body)  {String}    [newName]  Name that user wishes to change folder to
  * 
  * @apiSuccess  (204 Response)  {null}      null        No body is returned with this response
  * 
@@ -25,13 +26,38 @@ const router = express.Router();
 */
 router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, next) => {
     // error handling
-    if (req.body.oldPath == null || req.body.newPath == null) {
+    if (req.body.oldPath == null) {
         return res
             .status(400)
-            .json({success: false, msg: 'all fields must be filled'});
-    } else {
+            .json({success: false, msg: 'oldPath is a required field'});
+    } else if ((!req.body.newName == null) && (re.bodynewPath == null)) {
+        // rename mechanics
+
         // find the folder in question
-        Folder.getFolderByPath(req.user.email, req.body.oldPath,(err, folder) => {
+        Folder.getFolderByPath(req.user.email, req.body.oldPath, (err, folder) => {
+            if (err) throw err;
+
+            if (folder == undefined) {
+                return res
+                    .status(404)
+                    .json({success: false, msg: 'Folder not found'});
+            } else {
+                // update the name
+                Folder.updateName(folder, req.body.newName, (err, folder) => {
+                    if (err) throw err;
+
+                    // return successful response
+                    return res
+                        .status(204)
+                        .json({});
+                });
+            }
+        });
+    } else if ((req.body.newName == null) && (!re.bodynewPath == null)) {
+        // move mechanics
+
+        // find the folder in question
+        Folder.getFolderByPath(req.user.email, req.body.oldPath, (err, folder) => {
             if (err) throw err;
 
             if (folder == undefined) {
@@ -50,6 +76,10 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
                 });
             }
         });
+    } else {
+        return res
+            .status(400)
+            .json({success: false, msg: 'Request is not a valid one'});
     }
 });
 

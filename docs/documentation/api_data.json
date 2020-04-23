@@ -357,8 +357,8 @@
   {
     "type": "PUT",
     "url": "/api/folder/{id}",
-    "title": "Move Folder",
-    "name": "MoveFolder",
+    "title": "Update Folder",
+    "name": "UpdateFolder",
     "group": "Folder",
     "header": {
       "fields": {
@@ -386,9 +386,16 @@
           {
             "group": "Request Body",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "newPath",
             "description": "<p>Path that user wishes to move folder to</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": true,
+            "field": "newName",
+            "description": "<p>Name that user wishes to change folder to</p>"
           }
         ]
       }
