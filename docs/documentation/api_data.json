@@ -312,6 +312,49 @@
     "groupTitle": "Folder"
   },
   {
+    "type": "GET",
+    "url": "/api/folder",
+    "title": "Get User Folders",
+    "name": "GetFolders",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200 Response": [
+          {
+            "group": "200 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "Array",
+            "optional": false,
+            "field": "files",
+            "description": "<p>Array of user's files</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/userFolders.js",
+    "groupTitle": "Folder"
+  },
+  {
     "type": "POST",
     "url": "/api/user/authenticate",
     "title": "Authenticate User",

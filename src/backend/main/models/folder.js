@@ -21,7 +21,7 @@ const FolderSchema = mongoose.Schema({
 const Folder = module.exports = mongoose.model('Folder', FolderSchema);
 
 /**
-* [find folder by user]
+* [find folders by user]
 * @param {[String]} user [user pertaining to folders]
 * @return {[JSON]} [folder objects]
 */

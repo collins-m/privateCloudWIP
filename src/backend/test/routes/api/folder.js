@@ -136,4 +136,52 @@ describe('Folders', () => {
             
         });
     });
+
+    context('get user folders use cases', () => {
+        it('should return an array of user\'s folders', (done) => {
+            // create body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testfolder"
+            }
+            // upload folder
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            done();
+                        });
+                });
+        });
+
+        it('should return an empty array', (done) => {
+            // attempt to get file array
+            chai.request(server)
+                .get('/api/folder')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    res.body.should.have.property('folders').with.lengthOf(0);
+
+                    done();
+                });
+        });
+    });
 });
