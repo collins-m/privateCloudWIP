@@ -43,6 +43,94 @@
     "groupTitle": "File"
   },
   {
+    "type": "PUT",
+    "url": "/api/file/{id}",
+    "title": "Move File",
+    "name": "MoveFile",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "File",
+            "optional": false,
+            "field": "file",
+            "description": "<p>File that user wishes to upload</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "passcode",
+            "description": "<p>User inputted password to be used in encryption/decryption of file</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "204 Response": [
+          {
+            "group": "204 Response",
+            "type": "null",
+            "optional": false,
+            "field": "null",
+            "description": "<p>No body is returned with this response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/move.js",
+    "groupTitle": "File"
+  },
+  {
     "type": "POST",
     "url": "/api/file/upload",
     "title": "Upload File",
@@ -77,6 +165,13 @@
             "optional": false,
             "field": "passcode",
             "description": "<p>User inputted password to be used in encryption/decryption of file</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>absolute path of file as seen by the front end user</p>"
           }
         ]
       }
