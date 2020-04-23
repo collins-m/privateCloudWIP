@@ -14,7 +14,7 @@ const router = express.Router();
  * @apiHeader   (Authorization) {String}    token       User's unique bearer token
  * 
  * @apiParam    (Request Body)  {String}    folderName  Name of folder
- * @apiParam    (Request Body)  {String}    path        Path of folder (beigins with user email address as root)
+ * @apiParam    (Request Body)  {String}    path        Path of folder (beigins with '/')
  * 
  * @apiSuccess  (201 Response)  {Boolean}   success     Success state of operation
  * @apiSuccess  (201 Response)  {Array}     msg         Description of response
@@ -27,29 +27,28 @@ const router = express.Router();
 */
 router.post('/create', passport.authenticate('jwt', {session:false}), (req, res, next) => {
     // cast data as Folder object
+    if (req.body.path == null) {
+        return res
+            .status(400)
+            .json({success: false, msg: 'All fields must be filled'});
+    }
     let newFolder = new Folder({
         folderName: req.body.folderName,
-        path: req.body.path,
+        path: req.user.email + req.body.path,
         owner: req.user.email
     });
 
     // attempt to add folder
     Folder.addFolder(newFolder, (err, folder) => {
         if (err) {
-            if (err.name == "ValidationError") {
-                return res
-                .status(400)
-                .json({success: false, msg: 'All fields must be filled'});
-            } else {
-                return res
-                    .status(409)
-                    .json({success: false, msg: 'Failed to create folder'});
-            }
+            return res
+                .status(409)
+                .json({success: false, msg: 'Failed to create folder'});
         } else {
             // construct response
             const folderResponseObject = {
                 folderName: folder.folderName,
-                path: folder.path
+                path: '/' + folder.path.split('/').slice(1).join('/')
             }
             // return response
             return res

@@ -35,22 +35,6 @@
             "field": "files",
             "description": "<p>Array of user's files</p>"
           }
-        ],
-        "400 Response": [
-          {
-            "group": "400 Response",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>Success state of operation</p>"
-          },
-          {
-            "group": "400 Response",
-            "type": "String",
-            "optional": false,
-            "field": "msg",
-            "description": "<p>Description of response</p>"
-          }
         ]
       }
     },
@@ -171,7 +155,7 @@
             "type": "String",
             "optional": false,
             "field": "path",
-            "description": "<p>Path of folder (beigins with user email address as root)</p>"
+            "description": "<p>Path of folder (beigins with '/')</p>"
           }
         ]
       }

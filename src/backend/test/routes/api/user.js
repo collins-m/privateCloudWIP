@@ -1,8 +1,10 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
+const rimraf = require('rimraf');
 
 const User = require('../../../main/models/user');
+const Folder = require('../../../main/models/folder');
 const server = require('../../../../index');
 
 chai.use(chaiHttp);
@@ -10,13 +12,26 @@ chai.use(chaiHttp);
 describe('Users', () => {
     // cleanup
     beforeEach((done) => {
-        User.deleteMany({}, () => {
-            done();
+        Folder.deleteMany({}, () => {
+            User.deleteMany({}, () => {
+                done();
+            });
         });
     });
     afterEach((done) => {
-        User.deleteMany({}, () => {
-            done();
+        Folder.deleteMany({}, () => {
+            User.deleteMany({}, () => {
+                done();
+            });
+        });
+    });
+    after((done) => {
+        rimraf('./public/johndoe@mail.com', () => {
+            Folder.deleteMany({}, () => {
+                User.deleteMany({}, () => {
+                    done();
+                });
+            });
         });
     });
 

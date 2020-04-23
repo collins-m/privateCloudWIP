@@ -14,9 +14,6 @@ const router = express.Router();
  * 
  * @apiSuccess  (200 Response)  {Boolean}   success     Success state of operation
  * @apiSuccess  (200 Response)  {Array}     files       Array of user's files
- * 
- * @apiSuccess  (400 Response)  {Boolean}   success     Success state of operation
- * @apiSuccess  (400 Response)  {String}    msg         Description of response
 */
 router.get('/', passport.authenticate('jwt', {session:false}), (req, res, next) => {
     // get all files pertaining to a user

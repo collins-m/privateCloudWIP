@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const rimraf = require('rimraf');
+const fs = require('fs');
 
 const User = require('../../../models/user');
 const File = require('../../../models/file');
