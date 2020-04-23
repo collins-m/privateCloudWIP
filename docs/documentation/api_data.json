@@ -66,17 +66,17 @@
         "Request Body": [
           {
             "group": "Request Body",
-            "type": "File",
+            "type": "String",
             "optional": false,
-            "field": "file",
-            "description": "<p>File that user wishes to upload</p>"
+            "field": "oldPath",
+            "description": "<p>Path that file is currently located</p>"
           },
           {
             "group": "Request Body",
             "type": "String",
             "optional": false,
-            "field": "passcode",
-            "description": "<p>User inputted password to be used in encryption/decryption of file</p>"
+            "field": "newPath",
+            "description": "<p>Path that user wishes to move file to</p>"
           }
         ]
       }
@@ -352,6 +352,94 @@
     },
     "version": "0.0.0",
     "filename": "backend/main/routes/api/folder/userFolders.js",
+    "groupTitle": "Folder"
+  },
+  {
+    "type": "PUT",
+    "url": "/api/folder/{id}",
+    "title": "Move Folder",
+    "name": "MoveFolder",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "oldPath",
+            "description": "<p>Path that foler is currently located</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "newPath",
+            "description": "<p>Path that user wishes to move folder to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "204 Response": [
+          {
+            "group": "204 Response",
+            "type": "null",
+            "optional": false,
+            "field": "null",
+            "description": "<p>No body is returned with this response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/move.js",
     "groupTitle": "Folder"
   },
   {
