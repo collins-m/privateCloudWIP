@@ -21,7 +21,7 @@ const FolderSchema = mongoose.Schema({
 const Folder = module.exports = mongoose.model('Folder', FolderSchema);
 
 /**
-* [find folder by user]
+* [find folders by user]
 * @param {[String]} user [user pertaining to folders]
 * @return {[JSON]} [folder objects]
 */
@@ -47,12 +47,37 @@ module.exports.getFolderByName = function(user, folderName, callback){
 }
 
 /**
+* [find folder by user and path]
+* @param {[String]} user [user pertaining to folder]
+* @param {[String]} path [folder path as known by the user]
+* @return {[JSON]} [folder object]
+*/
+module.exports.getFolderByPath = function(user, path, callback){
+    const query = {
+        owner: user,
+        path: path
+    }
+    Folder.findOne(query, callback);
+}
+
+/**
 * [add a new folder]
 * @param {[File]} newFolder [Folder object as per above schema]
 * @return {[JSON]} [success/failure]
 */
 module.exports.addFolder = function(newFolder, callback){
     newFolder.save(callback);
+}
+
+/**
+* [update folder path]
+* @param {[Document]} file [Folder in question]
+* @param {[String]} newPath [new path of folder]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.updatePath = function(folder, newPath, callback){
+    folder.path = newPath;
+    folder.save(callback);
 }
 
 /**

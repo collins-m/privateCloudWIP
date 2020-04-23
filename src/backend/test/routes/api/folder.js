@@ -136,4 +136,244 @@ describe('Folders', () => {
             
         });
     });
+
+    context('get user folders use cases', () => {
+        it('should return an array of user\'s folders', (done) => {
+            // create body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testfolder"
+            }
+            // upload folder
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            done();
+                        });
+                });
+        });
+
+        it('should return an empty array', (done) => {
+            // attempt to get file array
+            chai.request(server)
+                .get('/api/folder')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    res.body.should.have.property('folders').with.lengthOf(0);
+
+                    done();
+                });
+        });
+    });
+
+    context('move folder use cases', () => {
+        it('should move a folder successfully', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/testFolder",
+                                "newPath": "/newFolder/testFolder"
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(204);
+
+                                // get file array
+                                chai.request(server)
+                                .get('/api/folder')
+                                .set('Authorization', token)
+                                .end((err, res) => {
+                                    res.should.have.status(200);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    res.body.should.have.property('folders').with.lengthOf(1);
+                                    res.body.folders[0].should.have.property('path').eql('/newFolder/testFolder');
+
+                                    done();
+                                });
+                            });
+                        });
+                });
+        });
+
+        it('should fail to move folder with missing "oldPath" parameter', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "newPath": "/newFolder/testFolder"
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(400);
+
+                                done();
+                            });
+                        });
+                });
+        });
+
+        it('should fail to move folder with missing "newPath" parameter', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/testFolder"
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(400);
+
+                                done();
+                            });
+                        });
+                });
+        });
+
+        it('should fail to move folder that does not exist', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/wrongFolder/testFolder",
+                                "newPath": "/newFolder/testFolder"
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(404);
+
+                                done();
+                            });
+                        });
+                });
+        });
+    });
 });

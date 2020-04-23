@@ -34,7 +34,7 @@ router.post('/create', passport.authenticate('jwt', {session:false}), (req, res,
     }
     let newFolder = new Folder({
         folderName: req.body.folderName,
-        path: req.user.email + req.body.path,
+        path: req.body.path,
         owner: req.user.email
     });
 

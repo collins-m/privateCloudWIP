@@ -1,19 +1,19 @@
 const express = require('express');
 const passport = require('passport');
 
-const File = require('../../../models/file');
+const Folder = require('../../../models/folder');
 
 const router = express.Router();
 
 /**
- * @api {PUT} /api/file/{id}                            Move File
- * @apiName MoveFile
- * @apiGroup File
+ * @api {PUT} /api/folder/{id}                          Move Folder
+ * @apiName MoveFolder
+ * @apiGroup Folder
  * 
  * @apiHeader   (Authorization) {String}    token       User's unique bearer token
  * 
- * @apiParam    (Request Body)  {String}    oldPath    Path that file is currently located
- * @apiParam    (Request Body)  {String}    newPath    Path that user wishes to move file to
+ * @apiParam    (Request Body)  {String}    oldPath    Path that foler is currently located
+ * @apiParam    (Request Body)  {String}    newPath    Path that user wishes to move folder to
  * 
  * @apiSuccess  (204 Response)  {null}      null        No body is returned with this response
  * 
@@ -30,17 +30,17 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
             .status(400)
             .json({success: false, msg: 'all fields must be filled'});
     } else {
-        // find the file in question
-        File.getFileByPath(req.user.email, req.body.oldPath,(err, file) => {
+        // find the folder in question
+        Folder.getFolderByPath(req.user.email, req.body.oldPath,(err, folder) => {
             if (err) throw err;
 
-            if (file == undefined) {
+            if (folder == undefined) {
                 return res
                     .status(404)
-                    .json({success: false, msg: 'File not found'});
+                    .json({success: false, msg: 'Folder not found'});
             } else {
                 // update the path
-                File.updatePath(file, req.body.newPath, (err, file) => {
+                Folder.updatePath(folder, req.body.newPath, (err, folder) => {
                     if (err) throw err;
 
                     // return successful response
