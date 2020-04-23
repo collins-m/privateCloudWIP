@@ -4,6 +4,7 @@ const zlib = require('zlib');
 const crypto = require('crypto');
 
 const AppendInitVector = require('../config/appendInitVector');
+const constants = require('../../../constants');
 
 // file schema
 const FileSchema = mongoose.Schema({
@@ -18,6 +19,11 @@ const FileSchema = mongoose.Schema({
     path: {
         type: String,
         required: true
+    },
+    serverPath: {
+        type: String,
+        required: true,
+        unique: true
     },
     owner: {
         type: String,
@@ -38,15 +44,15 @@ module.exports.getFileById = function(id, callback){
 }
 
 /**
-* [find file by user and name]
+* [find file by user and path]
 * @param {[String]} user [user pertaining to file]
-* @param {[String]} originalFilename [file name as known by the user]
+* @param {[String]} path [file path as known by the user]
 * @return {[JSON]} [file object]
 */
-module.exports.getFileByName = function(user, originalFilename, callback){
+module.exports.getFileByPath = function(user, path, callback){
     const query = {
-        user: user,
-        originalFilename: originalFilename
+        owner: user,
+        path: path
     }
     File.findOne(query, callback);
 }
@@ -70,6 +76,17 @@ module.exports.getFilesByUser = function(user, callback){
 */
 module.exports.addFile = function(newFile, callback){
     newFile.save(callback);
+}
+
+/**
+* [update file path]
+* @param {[Document]} file [File in question]
+* @param {[String]} newPath [new path of file]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.updatePath = function(file, newPath, callback){
+        file.path = newPath;
+        file.save(callback);
 }
 
 /**

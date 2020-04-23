@@ -72,6 +72,7 @@ describe('Files', () => {
             chai.request(server)
                 .post('/api/file/upload')
                 .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
                 .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
                 .set('Authorization', token)
                 .end((err, res) => {
@@ -87,6 +88,7 @@ describe('Files', () => {
             chai.request(server)
                 .post('/api/file/upload')
                 .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
                 .attach('file')
                 .set('Authorization', token)
                 .end((err, res) => {
@@ -101,6 +103,22 @@ describe('Files', () => {
         it('should fail to upload file with missing "passcode" field', (done) => {
             chai.request(server)
                 .post('/api/file/upload')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(false);
+
+                    done();
+                });
+        });
+
+        it('should fail to upload file with missing "path" field', (done) => {
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
                 .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
                 .set('Authorization', token)
                 .end((err, res) => {
@@ -119,6 +137,7 @@ describe('Files', () => {
             chai.request(server)
                 .post('/api/file/upload')
                 .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
                 .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
                 .set('Authorization', token)
                 .end((err, res) => {
@@ -153,6 +172,190 @@ describe('Files', () => {
                     res.body.should.have.property('files').with.lengthOf(0);
 
                     done();
+                });
+        });
+    });
+
+    context('move file use cases', () => {
+        it('should move a file successfully', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/testFile.txt",
+                                "newPath": "/testFolder/testFile.txt"
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(204);
+
+                                // get file array
+                                chai.request(server)
+                                .get('/api/file')
+                                .set('Authorization', token)
+                                .end((err, res) => {
+                                    res.should.have.status(200);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    res.body.should.have.property('files').with.lengthOf(1);
+                                    res.body.files[0].should.have.property('path').eql('/testFolder/testFile.txt');
+
+                                    done();
+                                });
+                            });
+                        });
+                });
+        });
+
+        it('should fail to move file with missing "oldPath" parameter', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "newPath": "/testFolder/testFile.txt"
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(400);
+
+                                done();
+                            });
+                        });
+                });
+        });
+
+        it('should fail to move file with missing "newPath" parameter', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/testFile.txt"
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(400);
+
+                                done();
+                            });
+                        });
+                });
+        });
+
+        it('should fail to move file that does not exist', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/wrongPath/testFile.txt",
+                                "newPath": "/testFolder/testFile.txt"
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(404);
+
+                                done();
+                            });
+                        });
                 });
         });
     });
