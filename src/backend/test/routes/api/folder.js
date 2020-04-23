@@ -4,7 +4,6 @@ const should = chai.should();
 const rimraf = require('rimraf');
 
 const User = require('../../../main/models/user');
-const File = require('../../../main/models/file');
 const Folder = require('../../../main/models/folder');
 const server = require('../../../../index');
 
@@ -12,7 +11,7 @@ let token;
 
 chai.use(chaiHttp);
 
-describe('Files', () => {
+describe('Folders', () => {
     // before class
     before((done) => {
         Folder.deleteMany({}, () => {
@@ -47,12 +46,12 @@ describe('Files', () => {
     });
     // cleanup
     beforeEach((done) => {
-        File.deleteMany({}, () => {
+        Folder.deleteMany({}, () => {
             done();
         });
     });
     afterEach((done) => {
-        File.deleteMany({}, () => {
+        Folder.deleteMany({}, () => {
             done();
         });
     });
@@ -67,13 +66,17 @@ describe('Files', () => {
         });
     });
 
-    context('file upload use cases', () => {
-        it('should upload a file successfully', (done) => {
+    context('folder creation use cases', () => {
+        it('should create a folder successfully', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
             chai.request(server)
-                .post('/api/file/upload')
-                .field('passcode', 'passcode')
-                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .post('/api/folder/create')
                 .set('Authorization', token)
+                .send(body)
                 .end((err, res) => {
                     res.should.have.status(201);
                     res.body.should.be.a('object');
@@ -83,12 +86,15 @@ describe('Files', () => {
                 });
         });
 
-        it('should fail to upload a missing file', (done) => {
+        it('should fail to create a folder with missing parameters', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder"
+            }
             chai.request(server)
-                .post('/api/file/upload')
-                .field('passcode', 'passcode')
-                .attach('file')
+                .post('/api/folder/create')
                 .set('Authorization', token)
+                .send(body)
                 .end((err, res) => {
                     res.should.have.status(400);
                     res.body.should.be.a('object');
@@ -98,62 +104,36 @@ describe('Files', () => {
                 });
         });
 
-        it('should fail to upload file with missing "passcode" field', (done) => {
+        it('should fail to create duplicate folder', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            // send initail request
             chai.request(server)
-                .post('/api/file/upload')
-                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .post('/api/folder/create')
                 .set('Authorization', token)
-                .end((err, res) => {
-                    res.should.have.status(400);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('success').eql(false);
-
-                    done();
-                });
-        });
-    });
-
-    context('get user files use cases', () => {
-        it('should return an array of user\'s files', (done) => {
-            // upload file
-            chai.request(server)
-                .post('/api/file/upload')
-                .field('passcode', 'passcode')
-                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
-                .set('Authorization', token)
+                .send(body)
                 .end((err, res) => {
                     res.should.have.status(201);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(true);
-                    
-                    // get file array
-                    chai.request(server)
-                        .get('/api/file')
-                        .set('Authorization', token)
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                            res.body.should.be.a('object');
-                            res.body.should.have.property('success').eql(true);
-                            res.body.should.have.property('files').with.lengthOf(1);
 
-                            done();
-                        });
+                    // should fail
+                chai.request(server)
+                    .post('/api/folder/create')
+                    .set('Authorization', token)
+                    .send(body)
+                    .end((err, res) => {
+                        res.should.have.status(409);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property('success').eql(false);
+
+                        done();
+                    });
                 });
-        });
-
-        it('should return an empty array', (done) => {
-            // attempt to get file array
-            chai.request(server)
-                .get('/api/file')
-                .set('Authorization', token)
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('success').eql(true);
-                    res.body.should.have.property('files').with.lengthOf(0);
-
-                    done();
-                });
+            
         });
     });
 });

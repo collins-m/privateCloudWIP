@@ -52,7 +52,8 @@ router.post('/upload', passport.authenticate('jwt', {session:false}), upload.sin
     }
 
     if (req.body.passcode == null) {
-    
+		// delete unencrypted file
+		fs.unlinkSync('./public/' + req.file.filename);
         return res
             .status(400)
             .json({success: false, msg: 'passcode field required'});
