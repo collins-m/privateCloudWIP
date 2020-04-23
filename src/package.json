@@ -4,7 +4,8 @@
   "description": "private cloud solution",
   "main": "index.js",
   "scripts": {
-    "test": "mocha */test/**/*.js --recursive",
+    "test": "mocha */test/**/*.js --recursive --timeout=3000 --exit",
+    "coverage": "nyc mocha */test/**/*.js --recursive --timeout=3000 --exit",
     "start": "node index.js",
     "docs": "apidoc -i ./backend ./frontend -o ../docs/documentation"
   },
@@ -29,7 +30,8 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^7.1.0",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "nyc": "^15.0.1"
   },
   "author": "Michael",
   "license": "ISC"
