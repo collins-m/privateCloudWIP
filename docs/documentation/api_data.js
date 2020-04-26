@@ -1,10 +1,154 @@
 define({ "api": [
   {
+    "type": "GET",
+    "url": "/api/file",
+    "title": "Get User Files",
+    "name": "GetFiles",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200 Response": [
+          {
+            "group": "200 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "Array",
+            "optional": false,
+            "field": "files",
+            "description": "<p>Array of user's files</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/userFiles.js",
+    "groupTitle": "File"
+  },
+  {
+    "type": "PUT",
+    "url": "/api/file/{id}",
+    "title": "Move File",
+    "name": "MoveFile",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "oldPath",
+            "description": "<p>Path that file is currently located</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "newPath",
+            "description": "<p>Path that user wishes to move file to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "204 Response": [
+          {
+            "group": "204 Response",
+            "type": "null",
+            "optional": false,
+            "field": "null",
+            "description": "<p>No body is returned with this response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/move.js",
+    "groupTitle": "File"
+  },
+  {
     "type": "POST",
     "url": "/api/file/upload",
     "title": "Upload File",
     "name": "UploadFile",
     "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Request Body": [
@@ -19,15 +163,15 @@ define({ "api": [
             "group": "Request Body",
             "type": "String",
             "optional": false,
-            "field": "owner",
-            "description": "<p>User email - owner of the uploaded file</p>"
+            "field": "passcode",
+            "description": "<p>User inputted password to be used in encryption/decryption of file</p>"
           },
           {
             "group": "Request Body",
             "type": "String",
             "optional": false,
-            "field": "passcode",
-            "description": "<p>User inputted password to be used in encryption/decryption of file</p>"
+            "field": "path",
+            "description": "<p>absolute path of file as seen by the front end user</p>"
           }
         ]
       }
@@ -71,6 +215,232 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "backend/main/routes/api/file/upload.js",
     "groupTitle": "File"
+  },
+  {
+    "type": "POST",
+    "url": "/api/folder/create",
+    "title": "Create User Folder",
+    "name": "GetFolders",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "folderName",
+            "description": "<p>Name of folder</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>Path of folder (beigins with '/')</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201 Response": [
+          {
+            "group": "201 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "201 Response",
+            "type": "Array",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "409 Response": [
+          {
+            "group": "409 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "409 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/create.js",
+    "groupTitle": "Folder"
+  },
+  {
+    "type": "GET",
+    "url": "/api/folder",
+    "title": "Get User Folders",
+    "name": "GetFolders",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200 Response": [
+          {
+            "group": "200 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "Array",
+            "optional": false,
+            "field": "files",
+            "description": "<p>Array of user's files</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/userFolders.js",
+    "groupTitle": "Folder"
+  },
+  {
+    "type": "PUT",
+    "url": "/api/folder/{id}",
+    "title": "Move Folder",
+    "name": "MoveFolder",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "oldPath",
+            "description": "<p>Path that foler is currently located</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "newPath",
+            "description": "<p>Path that user wishes to move folder to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "204 Response": [
+          {
+            "group": "204 Response",
+            "type": "null",
+            "optional": false,
+            "field": "null",
+            "description": "<p>No body is returned with this response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/move.js",
+    "groupTitle": "Folder"
   },
   {
     "type": "POST",
@@ -177,7 +547,7 @@ define({ "api": [
   },
   {
     "type": "DELETE",
-    "url": "/api/user/{id}",
+    "url": "/api/user/",
     "title": "Delete User",
     "name": "DeleteUser",
     "group": "User",
@@ -190,19 +560,6 @@ define({ "api": [
             "optional": false,
             "field": "token",
             "description": "<p>User's unique bearer token</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Query Param": [
-          {
-            "group": "Query Param",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p>Mandatory ID assocaited with User account</p>"
           }
         ]
       }
@@ -233,7 +590,7 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/api/user/{id}",
+    "url": "/api/user/",
     "title": "Get User",
     "name": "GetUser",
     "group": "User",
@@ -246,19 +603,6 @@ define({ "api": [
             "optional": false,
             "field": "token",
             "description": "<p>User's unique bearer token</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Query Param": [
-          {
-            "group": "Query Param",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p>Mandatory ID assocaited with User account</p>"
           }
         ]
       }

@@ -4,13 +4,14 @@ const multer = require('multer');
 const fs = require('fs');
 
 const File = require('../../../models/file');
+const constants = require('../../../../../constants');
 
 const router = express.Router();
 
 // define disk storage instructions
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, './public/')
+    callback(null, constants.filePath + '/')
   },
   filename: (req, file, callback) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -24,9 +25,11 @@ const upload = multer({ storage: storage })
  * @apiName UploadFile
  * @apiGroup File
  * 
+ * @apiHeader   (Authorization) {String}    token       User's unique bearer token
+ * 
  * @apiParam    (Request Body)  {File}      file        File that user wishes to upload
- * @apiParam    (Request Body)  {String}    owner       User email - owner of the uploaded file
  * @apiParam    (Request Body)  {String}    passcode    User inputted password to be used in encryption/decryption of file
+ * @apiParam    (Request Body)  {String}    path        absolute path of file as seen by the front end user
  * 
  * @apiSuccess  (201 Response)  {Boolean}   success     Success state of operation
  * @apiSuccess  (201 Response)  {String}    msg         Description of response
@@ -41,8 +44,9 @@ router.post('/upload', passport.authenticate('jwt', {session:false}), upload.sin
       newFile = new File({
         originalFilename: req.file.originalname,
         filename: req.file.filename,
-        path: 'public/' + req.body.owner + '/' + req.file.filename + '.enc',
-        owner: req.body.owner
+        path: req.body.path,
+        serverPath: constants.filePath + '/' + req.user.email + '/' + req.file.filename + '.enc',
+        owner: req.user.email
       });
     } catch (TypeError) {
         return res
@@ -50,25 +54,16 @@ router.post('/upload', passport.authenticate('jwt', {session:false}), upload.sin
             .json({success: false, msg: 'File missing'});
     }
 
-    if (req.body.owner == null && req.body.passcode == null) {
-    
-        return res
-            .status(400)
-            .json({success: false, msg: 'owner field and passcode fields required'});
-    } else if (req.body.owner == null) {
-    
-        return res
-            .status(400)
-            .json({success: false, msg: 'owner field required'});
-    } else if (req.body.passcode == null) {
-    
+    if (req.body.passcode == null) {
+		// delete unencrypted file
+		fs.unlinkSync(constants.filePath + '/' + req.file.filename);
         return res
             .status(400)
             .json({success: false, msg: 'passcode field required'});
     } else {
     
         // move file to user subdirectory
-        File.moveAndEncryptFile(req.file.path, newFile.path, req.body.cipherKey, (err) => {
+        File.moveAndEncryptFile(req.file.path, newFile.serverPath, req.body.passcode, (err) => {
             if (err) {
                 console.log(err);
             }

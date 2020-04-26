@@ -4,6 +4,7 @@ const zlib = require('zlib');
 const crypto = require('crypto');
 
 const AppendInitVector = require('../config/appendInitVector');
+const constants = require('../../../constants');
 
 // file schema
 const FileSchema = mongoose.Schema({
@@ -18,6 +19,11 @@ const FileSchema = mongoose.Schema({
     path: {
         type: String,
         required: true
+    },
+    serverPath: {
+        type: String,
+        required: true,
+        unique: true
     },
     owner: {
         type: String,
@@ -38,16 +44,29 @@ module.exports.getFileById = function(id, callback){
 }
 
 /**
-* [find file by user and name]
+* [find file by user and path]
 * @param {[String]} user [user pertaining to file]
+* @param {[String]} path [file path as known by the user]
 * @return {[JSON]} [file object]
 */
-module.exports.getFileByName = function(user, originalFilename, callback){
+module.exports.getFileByPath = function(user, path, callback){
     const query = {
-        user: user,
-        originalFilename: originalFilename
+        owner: user,
+        path: path
     }
     File.findOne(query, callback);
+}
+
+/**
+* [find files by user]
+* @param {[String]} user [user pertaining to files]
+* @return {[JSON]} [file objects]
+*/
+module.exports.getFilesByUser = function(user, callback){
+    const query = {
+        owner: user,
+    }
+    File.find(query, callback);
 }
 
 /**
@@ -60,11 +79,22 @@ module.exports.addFile = function(newFile, callback){
 }
 
 /**
+* [update file path]
+* @param {[Document]} file [File in question]
+* @param {[String]} newPath [new path of file]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.updatePath = function(file, newPath, callback){
+        file.path = newPath;
+        file.save(callback);
+}
+
+/**
  * [delete all files under a certain user account]
  * @param {[String]} user [String denoting the associated user's email]
  * @return {[null]}
  */
-module.exports.deleteAllUserFiles = function(user, callback){
+module.exports.deleteAllUserFiles = function(user){
     const query = {
         owner: user
     }
