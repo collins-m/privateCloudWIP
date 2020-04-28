@@ -326,6 +326,94 @@ define({ "api": [
     "groupTitle": "Folder"
   },
   {
+    "type": "DELETE",
+    "url": "/api/folder/{id}",
+    "title": "Delete Folder",
+    "name": "DeleteFolder",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>Path that foler is currently located</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200 Response": [
+          {
+            "group": "200 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/delete.js",
+    "groupTitle": "Folder"
+  },
+  {
     "type": "GET",
     "url": "/api/folder",
     "title": "Get User Folders",
@@ -575,7 +663,7 @@ define({ "api": [
   },
   {
     "type": "DELETE",
-    "url": "/api/user/",
+    "url": "/api/user/{id}",
     "title": "Delete User",
     "name": "DeleteUser",
     "group": "User",
@@ -594,16 +682,16 @@ define({ "api": [
     },
     "success": {
       "fields": {
-        "200": [
+        "200 Response": [
           {
-            "group": "200",
+            "group": "200 Response",
             "type": "Boolean",
             "optional": false,
             "field": "success",
             "description": "<p>Success state of operation</p>"
           },
           {
-            "group": "200",
+            "group": "200 Response",
             "type": "String",
             "optional": false,
             "field": "msg",
@@ -618,7 +706,7 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/api/user/",
+    "url": "/api/user/{id}",
     "title": "Get User",
     "name": "GetUser",
     "group": "User",
