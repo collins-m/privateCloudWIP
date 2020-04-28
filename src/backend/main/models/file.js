@@ -90,6 +90,19 @@ module.exports.updatePath = function(file, newPath, callback){
 }
 
 /**
+* [update file name]
+* @param {[Document]} file [File in question]
+* @param {[String]} newName [new name of file]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.updateName = function(file, newName, callback){
+    const newPath = file.path.split('/').slice(0, -1).join('/') + '/' + newName;
+    file.originalFilename = newName;
+    file.path = newPath;
+    file.save(callback);
+}
+
+/**
  * [delete all files under a certain user account]
  * @param {[String]} user [String denoting the associated user's email]
  * @return {[null]}
