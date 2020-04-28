@@ -154,7 +154,7 @@ describe('Folders', () => {
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(true);
                     
-                    // get file array
+                    // get folder array
                     chai.request(server)
                         .get('/api/folder')
                         .set('Authorization', token)
@@ -170,7 +170,7 @@ describe('Folders', () => {
         });
 
         it('should return an empty array', (done) => {
-            // attempt to get file array
+            // attempt to get folder array
             chai.request(server)
                 .get('/api/folder')
                 .set('Authorization', token)
@@ -216,7 +216,7 @@ describe('Folders', () => {
                                 "oldPath": "/testFolder",
                                 "newPath": "/newFolder/testFolder"
                             }
-                            // attempt to move file
+                            // attempt to move folder
                             chai.request(server)
                             .put('/api/folder/{id}')
                             .query('id', res.body.id)
@@ -225,7 +225,7 @@ describe('Folders', () => {
                             .end((err, res) => {
                                 res.should.have.status(204);
 
-                                // get file array
+                                // get folder array
                                 chai.request(server)
                                 .get('/api/folder')
                                 .set('Authorization', token)
@@ -272,7 +272,7 @@ describe('Folders', () => {
                             const body = {
                                 "newPath": "/newFolder/testFolder"
                             }
-                            // attempt to move file
+                            // attempt to move folder
                             chai.request(server)
                             .put('/api/folder/{id}')
                             .query('id', res.body.id)
@@ -317,7 +317,7 @@ describe('Folders', () => {
                                 "oldPath": "/wrongFolder/testFolder",
                                 "newPath": "/newFolder/testFolder"
                             }
-                            // attempt to move file
+                            // attempt to move folder
                             chai.request(server)
                             .put('/api/folder/{id}')
                             .query('id', res.body.id)
@@ -364,7 +364,7 @@ describe('Folders', () => {
                                 "oldPath": "/testFolder",
                                 "newName": "testFolderRenamed"
                             }
-                            // attempt to rename file
+                            // attempt to rename folder
                             chai.request(server)
                             .put('/api/folder/{id}')
                             .query('id', res.body.id)
@@ -373,7 +373,7 @@ describe('Folders', () => {
                             .end((err, res) => {
                                 res.should.have.status(204);
 
-                                // get file array
+                                // get folder array
                                 chai.request(server)
                                 .get('/api/folder')
                                 .set('Authorization', token)
@@ -421,7 +421,7 @@ describe('Folders', () => {
                             const body = {
                                 "newName": "testFolderRenamed"
                             }
-                            // attempt to move file
+                            // attempt to rename folder
                             chai.request(server)
                             .put('/api/folder/{id}')
                             .query('id', res.body.id)
@@ -466,7 +466,7 @@ describe('Folders', () => {
                                 "oldPath": "/wrongFolder/testFolder",
                                 "newName": "testFolderRenamed"
                             }
-                            // attempt to move file
+                            // attempt to rename folder
                             chai.request(server)
                             .put('/api/folder/{id}')
                             .query('id', res.body.id)
@@ -513,7 +513,7 @@ describe('Folders', () => {
                                 "oldPath": "/testFolder",
                                 "favourite": true
                             }
-                            // attempt to rename file
+                            // attempt to favourite folder
                             chai.request(server)
                             .put('/api/folder/{id}')
                             .query('id', res.body.id)
@@ -569,7 +569,7 @@ describe('Folders', () => {
                             const body = {
                                 "favourite": true
                             }
-                            // attempt to move file
+                            // attempt to favourtite file
                             chai.request(server)
                             .put('/api/folder/{id}')
                             .query('id', res.body.id)
@@ -614,7 +614,7 @@ describe('Folders', () => {
                                 "oldPath": "/wrongFolder/testFolder",
                                 "favourite": true
                             }
-                            // attempt to move file
+                            // attempt to favourite file
                             chai.request(server)
                             .put('/api/folder/{id}')
                             .query('id', res.body.id)
