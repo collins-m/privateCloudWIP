@@ -1,5 +1,93 @@
 define({ "api": [
   {
+    "type": "DELETE",
+    "url": "/api/file/{id}",
+    "title": "Delete File",
+    "name": "DeleteFile",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>Path that file is currently located</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200 Response": [
+          {
+            "group": "200 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/delete.js",
+    "groupTitle": "File"
+  },
+  {
     "type": "GET",
     "url": "/api/file",
     "title": "Get User Files",
