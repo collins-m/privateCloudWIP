@@ -481,4 +481,152 @@ describe('Folders', () => {
                 });
         });
     });
+
+    context('favourite folder use cases', () => {
+        it('should favourite a folder successfully', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/testFolder",
+                                "favourite": true
+                            }
+                            // attempt to rename file
+                            chai.request(server)
+                            .put('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(204);
+
+                                // get file array
+                                chai.request(server)
+                                .get('/api/folder')
+                                .set('Authorization', token)
+                                .end((err, res) => {
+                                    res.should.have.status(200);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    res.body.should.have.property('folders').with.lengthOf(1);
+                                    res.body.folders[0].should.have.property('favourite').eql(true);
+
+                                    done();
+                                });
+                            });
+                        });
+                });
+        });
+
+        it('should fail to favourite folder with missing "oldPath" parameter', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "favourite": true
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(400);
+
+                                done();
+                            });
+                        });
+                });
+        });
+
+        it('should fail to favourite folder that does not exist', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/wrongFolder/testFolder",
+                                "favourite": true
+                            }
+                            // attempt to move file
+                            chai.request(server)
+                            .put('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(404);
+
+                                done();
+                            });
+                        });
+                });
+        });
+    });
 });

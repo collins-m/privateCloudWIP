@@ -15,6 +15,7 @@ const router = express.Router();
  * @apiParam    (Request Body)  {String}    oldPath     Path that foler is currently located
  * @apiParam    (Request Body)  {String}    [newPath]   Path that user wishes to move folder to
  * @apiParam    (Request Body)  {String}    [newName]   Name that user wishes to change folder to
+ * @apiParam    (Request Body)  {Boolean}   [favourite] Favourite flag
  * 
  * @apiSuccess  (204 Response)  {null}      null        No body is returned with this response
  * 
@@ -30,7 +31,7 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
         return res
             .status(400)
             .json({success: false, msg: 'oldPath is a required field'});
-    } else if (!(req.body.newName == null) && (req.body.newPath == null)) {
+    } else if (!(req.body.newName == null) && (req.body.newPath == null) && (req.body.favourite == null)) {
         // rename mechanics
 
         // find the folder in question
@@ -53,7 +54,7 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
                 });
             }
         });
-    } else if ((req.body.newName == null) && !(req.body.newPath == null)) {
+    } else if ((req.body.newName == null) && !(req.body.newPath == null) && (req.body.favourite == null)) {
         // move mechanics
 
         // find the folder in question
@@ -67,6 +68,29 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
             } else {
                 // update the path
                 Folder.updatePath(folder, req.body.newPath, (err, folder) => {
+                    if (err) throw err;
+
+                    // return successful response
+                    return res
+                        .status(204)
+                        .json({});
+                });
+            }
+        });
+    } else if (!(req.body.favourite == null)  && (req.body.newPath == null) && (req.body.newName == null)) {
+        // update favourite flag
+
+        // find the folder in question
+        Folder.getFolderByPath(req.user.email, req.body.oldPath, (err, folder) => {
+            if (err) throw err;
+
+            if (folder == undefined) {
+                return res
+                    .status(404)
+                    .json({success: false, msg: 'Folder not found'});
+            } else {
+                // update favourite flag
+                Folder.updateFavouriteStatus(folder, req.body.favourite, (err, folder) => {
                     if (err) throw err;
 
                     // return successful response

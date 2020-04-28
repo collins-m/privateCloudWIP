@@ -403,6 +403,13 @@ define({ "api": [
             "optional": true,
             "field": "newName",
             "description": "<p>Name that user wishes to change folder to</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "Boolean",
+            "optional": true,
+            "field": "favourite",
+            "description": "<p>Favourite flag</p>"
           }
         ]
       }

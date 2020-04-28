@@ -14,6 +14,11 @@ const FolderSchema = mongoose.Schema({
     owner: {
         type: String,
         required: true
+    },
+    favourite: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 });
 
@@ -90,6 +95,17 @@ module.exports.updateName = function(folder, newName, callback){
     const newPath = folder.path.split('/').slice(0, -1).join('/') + '/' + newName;
     folder.folderName = newName;
     folder.path = newPath;
+    folder.save(callback);
+}
+
+/**
+* [update folder path]
+* @param {[Document]} folder [Folder in question]
+* @param {[String]} favourite [favourite status of folder]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.updateFavouriteStatus = function(folder, favourite, callback){
+    folder.favourite = favourite;
     folder.save(callback);
 }
 
