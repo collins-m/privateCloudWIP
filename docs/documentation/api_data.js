@@ -178,7 +178,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "path",
-            "description": "<p>absolute path of file as seen by the front end user</p>"
+            "description": "<p>Absolute path of file</p>"
           }
         ]
       }
@@ -226,8 +226,8 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/api/folder/create",
-    "title": "Create User Folder",
-    "name": "GetFolders",
+    "title": "Create Folder",
+    "name": "CreateFolder",
     "group": "Folder",
     "header": {
       "fields": {
@@ -257,7 +257,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "path",
-            "description": "<p>Path of folder (beigins with '/')</p>"
+            "description": "<p>Absolute path of folder</p>"
           }
         ]
       }

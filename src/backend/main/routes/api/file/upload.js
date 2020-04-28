@@ -29,7 +29,7 @@ const upload = multer({ storage: storage })
  * 
  * @apiParam    (Request Body)  {File}      file        File that user wishes to upload
  * @apiParam    (Request Body)  {String}    passcode    User inputted password to be used in encryption/decryption of file
- * @apiParam    (Request Body)  {String}    path        absolute path of file as seen by the front end user
+ * @apiParam    (Request Body)  {String}    path        Absolute path of file
  * 
  * @apiSuccess  (201 Response)  {Boolean}   success     Success state of operation
  * @apiSuccess  (201 Response)  {String}    msg         Description of response
