@@ -10,7 +10,7 @@ const Folder = require('../../../models/folder');
 const router = express.Router();
 
 /**
- * @api {GET} /api/user/                            Get User
+ * @api {GET} /api/user/{id}                        Get User
  * @apiName GetUser
  * @apiGroup User
  * 
@@ -32,14 +32,14 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
 });
 
 /**
- * @api {DELETE} /api/user/                          Delete User
+ * @api {DELETE} /api/user/{id}                      Delete User
  * @apiName DeleteUser
  * @apiGroup User
  * 
  * @apiHeader   (Authorization) {String}    token    User's unique bearer token
  * 
- * @apiSuccess  (200)           {Boolean}   success  Success state of operation
- * @apiSuccess  (200)           {String}    msg      Description of response
+ * @apiSuccess  (200 Response)  {Boolean}   success  Success state of operation
+ * @apiSuccess  (200 Response)  {String}    msg      Description of response
 */
 router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 

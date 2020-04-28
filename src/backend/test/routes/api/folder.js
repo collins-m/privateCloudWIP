@@ -629,4 +629,148 @@ describe('Folders', () => {
                 });
         });
     });
+
+    context('delete folder use cases', () => {
+        it('should delete a folder successfully', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "path": "/testFolder"
+                            }
+                            // attempt to delete folder
+                            chai.request(server)
+                            .delete('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(200);
+
+                                // get folder array
+                                chai.request(server)
+                                .get('/api/folder')
+                                .set('Authorization', token)
+                                .end((err, res) => {
+                                    res.should.have.status(200);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    res.body.should.have.property('folders').with.lengthOf(0);
+
+                                    done();
+                                });
+                            });
+                        });
+                });
+        });
+
+        it('should fail to delete folder with missing "path" parameter', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                            }
+                            // attempt to delete file
+                            chai.request(server)
+                            .delete('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(400);
+
+                                done();
+                            });
+                        });
+                });
+        });
+
+        it('should fail to delete folder that does not exist', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "path": "/wrongFolder/testFolder"
+                            }
+                            // attempt to delete file
+                            chai.request(server)
+                            .delete('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(404);
+
+                                done();
+                            });
+                        });
+                });
+        });
+    });
 });

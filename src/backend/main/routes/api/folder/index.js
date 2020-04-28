@@ -6,7 +6,8 @@ FolderRouter.route('/')
 
 // update a folder
 FolderRouter.route('/:id')
-  .put(require('./update.js'));
+  .put(require('./update.js'))
+  .delete(require('./delete.js'));
 
 // create new folder
 FolderRouter.route('/create')

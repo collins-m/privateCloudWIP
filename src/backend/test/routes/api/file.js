@@ -601,4 +601,142 @@ describe('Files', () => {
                 });
         });
     });
+
+    context('delete file use cases', () => {
+        it('should delete a file successfully', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "path": "/testFile.txt"
+                            }
+                            // attempt to delete file
+                            chai.request(server)
+                            .delete('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(200);
+
+                                // get file array
+                                chai.request(server)
+                                .get('/api/file')
+                                .set('Authorization', token)
+                                .end((err, res) => {
+                                    res.should.have.status(200);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    res.body.should.have.property('files').with.lengthOf(0);
+
+                                    done();
+                                });
+                            });
+                        });
+                });
+        });
+
+        it('should fail to delete file with missing "path" parameter', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                            }
+                            // attempt to delete file
+                            chai.request(server)
+                            .delete('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(400);
+
+                                done();
+                            });
+                        });
+                });
+        });
+
+        it('should fail to delete file that does not exist', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "path": "/wrongPath/testFile.txt"
+                            }
+                            // attempt to delete file
+                            chai.request(server)
+                            .delete('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(404);
+
+                                done();
+                            });
+                        });
+                });
+        });
+    });
 });

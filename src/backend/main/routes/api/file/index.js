@@ -10,6 +10,7 @@ FileRouter.route('/upload')
 
 // update a file
 FileRouter.route('/:id')
-  .put(require('./update.js'));
+  .put(require('./update.js'))
+  .delete(require('./delete.js'));
 
 module.exports = FileRouter;
