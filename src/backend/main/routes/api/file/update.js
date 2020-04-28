@@ -15,6 +15,7 @@ const router = express.Router();
  * @apiParam    (Request Body)  {String}    oldPath     Path that file is currently located
  * @apiParam    (Request Body)  {String}    [newPath]   Path that user wishes to move file to
  * @apiParam    (Request Body)  {String}    [newName]   Name that user wishes to change folder to
+ * @apiParam    (Request Body)  {Boolean}   [favourite] Favourite flag
  * 
  * @apiSuccess  (204 Response)  {null}      null        No body is returned with this response
  * 
@@ -30,7 +31,7 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
         return res
             .status(400)
             .json({success: false, msg: 'oldPath is a required field'});
-    } else if ((req.body.newName == null) && !(req.body.newPath == null)) {
+    } else if ((req.body.newName == null) && !(req.body.newPath == null) && (req.body.favourite == null)) {
         // move mechanics
 
         // find the file in question
@@ -53,7 +54,7 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
                 });
             }
         });
-    } else if (!(req.body.newName == null) && (req.body.newPath == null)) {
+    } else if (!(req.body.newName == null) && (req.body.newPath == null) && (req.body.favourite == null)) {
         // rename mechanics
 
         // find the file in question
@@ -67,6 +68,29 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
             } else {
                 // update the path
                 File.updateName(file, req.body.newName, (err, file) => {
+                    if (err) throw err;
+
+                    // return successful response
+                    return res
+                        .status(204)
+                        .json({});
+                });
+            }
+        });
+    } else if ((req.body.newName == null) && (req.body.newPath == null) && !(req.body.favourite == null)) {
+        // update favourite flag
+
+        // find the file in question
+        File.getFileByPath(req.user.email, req.body.oldPath, (err, file) => {
+            if (err) throw err;
+
+            if (file == undefined) {
+                return res
+                    .status(404)
+                    .json({success: false, msg: 'File not found'});
+            } else {
+                // update favourite flag
+                File.updateFavouriteStatus(file, req.body.favourite, (err, file) => {
                     if (err) throw err;
 
                     // return successful response

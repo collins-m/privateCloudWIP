@@ -23,11 +23,11 @@ router.get('/', passport.authenticate('jwt', {session:false}), (req, res, next) 
         // format response
         let fileArray = [];
         files.forEach(file => {
-            const path = file.path;
             fileArray.push({
                 id: file._id,
                 filename: file.originalFilename,
-                path: path
+                path: file.path,
+                favourite: file.favourite
             });
         });
 

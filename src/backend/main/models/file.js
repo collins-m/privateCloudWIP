@@ -28,6 +28,11 @@ const FileSchema = mongoose.Schema({
     owner: {
         type: String,
         required: true
+    },
+    favourite: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 });
 
@@ -99,6 +104,17 @@ module.exports.updateName = function(file, newName, callback){
     const newPath = file.path.split('/').slice(0, -1).join('/') + '/' + newName;
     file.originalFilename = newName;
     file.path = newPath;
+    file.save(callback);
+}
+
+/**
+* [update file path]
+* @param {[Document]} file [File in question]
+* @param {[Boolean]} favourite [favourite status of file]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.updateFavouriteStatus = function(file, favourite, callback){
+    file.favourite = favourite;
     file.save(callback);
 }
 

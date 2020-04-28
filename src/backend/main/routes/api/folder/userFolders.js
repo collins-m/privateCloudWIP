@@ -23,11 +23,11 @@ router.get('/', passport.authenticate('jwt', {session:false}), (req, res, next) 
         // format response
         let folderArray = [];
         folders.forEach(folder => {
-            const path = folder.path;
             folderArray.push({
                 id: folder._id,
                 folderName: folder.folderName,
-                path: path
+                path: folder.path,
+                favourite: folder.favourite
             });
         });
 

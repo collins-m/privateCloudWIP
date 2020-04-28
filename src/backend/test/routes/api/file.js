@@ -459,4 +459,146 @@ describe('Files', () => {
                 });
         });
     });
+
+    context('favourite file use cases', () => {
+        it('should favourite a file successfully', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/testFile.txt",
+                                "favourite": true
+                            }
+                            // attempt to favourite file
+                            chai.request(server)
+                            .put('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(204);
+
+                                // get file array
+                                chai.request(server)
+                                .get('/api/file')
+                                .set('Authorization', token)
+                                .end((err, res) => {
+                                    res.should.have.status(200);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    res.body.should.have.property('files').with.lengthOf(1);
+                                    res.body.files[0].should.have.property('favourite').eql(true);
+
+                                    done();
+                                });
+                            });
+                        });
+                });
+        });
+
+        it('should fail to favourite file with missing "oldPath" parameter', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "favourite": true
+                            }
+                            // attempt to favourite file
+                            chai.request(server)
+                            .put('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(400);
+
+                                done();
+                            });
+                        });
+                });
+        });
+
+        it('should fail to favourite file that does not exist', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "oldPath": "/wrongPath/testFile.txt",
+                                "favourite": true
+                            }
+                            // attempt to favourite file
+                            chai.request(server)
+                            .put('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(404);
+
+                                done();
+                            });
+                        });
+                });
+        });
+    });
 });
