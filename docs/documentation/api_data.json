@@ -45,8 +45,8 @@
   {
     "type": "PUT",
     "url": "/api/file/{id}",
-    "title": "Move File",
-    "name": "MoveFile",
+    "title": "Update File",
+    "name": "UpdateFile",
     "group": "File",
     "header": {
       "fields": {
@@ -74,9 +74,16 @@
           {
             "group": "Request Body",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "newPath",
             "description": "<p>Path that user wishes to move file to</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": true,
+            "field": "newName",
+            "description": "<p>Name that user wishes to change folder to</p>"
           }
         ]
       }
@@ -127,7 +134,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "backend/main/routes/api/file/move.js",
+    "filename": "backend/main/routes/api/file/update.js",
     "groupTitle": "File"
   },
   {
@@ -446,7 +453,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "backend/main/routes/api/folder/move.js",
+    "filename": "backend/main/routes/api/folder/update.js",
     "groupTitle": "Folder"
   },
   {

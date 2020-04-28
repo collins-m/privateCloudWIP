@@ -87,7 +87,9 @@ module.exports.updatePath = function(folder, newPath, callback){
 * @return {[JSON]} [success/failure]
 */
 module.exports.updateName = function(folder, newName, callback){
+    const newPath = folder.path.split('/').slice(0, -1).join('/') + '/' + newName;
     folder.folderName = newName;
+    folder.path = newPath;
     folder.save(callback);
 }
 

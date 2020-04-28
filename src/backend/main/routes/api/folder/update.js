@@ -12,9 +12,9 @@ const router = express.Router();
  * 
  * @apiHeader   (Authorization) {String}    token       User's unique bearer token
  * 
- * @apiParam    (Request Body)  {String}    oldPath    Path that foler is currently located
- * @apiParam    (Request Body)  {String}    [newPath]  Path that user wishes to move folder to
- * @apiParam    (Request Body)  {String}    [newName]  Name that user wishes to change folder to
+ * @apiParam    (Request Body)  {String}    oldPath     Path that foler is currently located
+ * @apiParam    (Request Body)  {String}    [newPath]   Path that user wishes to move folder to
+ * @apiParam    (Request Body)  {String}    [newName]   Name that user wishes to change folder to
  * 
  * @apiSuccess  (204 Response)  {null}      null        No body is returned with this response
  * 
@@ -30,7 +30,7 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
         return res
             .status(400)
             .json({success: false, msg: 'oldPath is a required field'});
-    } else if ((!req.body.newName == null) && (re.bodynewPath == null)) {
+    } else if (!(req.body.newName == null) && (req.body.newPath == null)) {
         // rename mechanics
 
         // find the folder in question
@@ -53,7 +53,7 @@ router.put('/:id', passport.authenticate('jwt', {session:false}), (req, res, nex
                 });
             }
         });
-    } else if ((req.body.newName == null) && (!re.bodynewPath == null)) {
+    } else if ((req.body.newName == null) && !(req.body.newPath == null)) {
         // move mechanics
 
         // find the folder in question
