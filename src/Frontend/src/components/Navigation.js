@@ -24,6 +24,11 @@ class Navigation extends Component{
                         Register
                     </Link>
                 </li>
+                <li className="nav-item">
+                    <Link to="/uploadFile" className ="nav-link">
+                        Upload
+                    </Link>
+                </li>
             </ul>
         )
         //next group of unordered list for profile
