@@ -30,6 +30,7 @@ router.get('/', passport.authenticate('jwt', {session:false}), (req, res, next) 
                 favourite: file.favourite,
                 accessList: file.accessList
             });
+        });
 
         // get all files shared with a user
         File.getFilesByArrayList(req.user.email, (err, files) => {
@@ -51,7 +52,6 @@ router.get('/', passport.authenticate('jwt', {session:false}), (req, res, next) 
             return res
                 .status(200)
                 .json({success: true, files: fileArray, sharedFiles: sharedFilesArray});
-        });
         });
     });
 });

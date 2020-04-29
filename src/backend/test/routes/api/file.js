@@ -53,15 +53,22 @@ describe('Files', () => {
     });
     afterEach((done) => {
         File.deleteMany({}, () => {
-            done();
+            const query = {
+                "email": "testUser@mail.com"
+            }
+            User.deleteOne(query, () => {
+                done();
+            });
         });
     });
     // after class
     after((done) => {
         rimraf('./public/johndoe@mail.com', () => {
-            Folder.deleteMany({}, () => {
-                User.deleteMany({}, () => {
-                    done();
+            rimraf('./public/testUser@mail.com', () => {
+                Folder.deleteMany({}, () => {
+                    User.deleteMany({}, () => {
+                        done();
+                    });
                 });
             });
         });
@@ -727,6 +734,263 @@ describe('Files', () => {
                             // attempt to delete file
                             chai.request(server)
                             .delete('/api/file/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(404);
+
+                                done();
+                            });
+                        });
+                });
+        });
+    });
+
+    
+
+    context('share file use cases', () => {
+        it('should share a file successfully', (done) => {
+            // create user
+            const user = {
+                "firstname": "John",
+                "surname": "Doe",
+                "email": "testUser@mail.com",
+                "password": "password"
+            }
+            chai.request(server)
+                .post('/api/user/register')
+                .send(user)
+                .end((err, res) => {
+                    const authBody = {
+                        "email": "testUser@mail.com",
+                        "password": "password"
+                    }
+                    // authenticate user
+                    chai.request(server)
+                        .post('/api/user/authenticate')
+                        .send(authBody)
+                        .end((err, res) => {
+                            const secondAuth = res.body.token;
+
+                            // upload file
+                            chai.request(server)
+                                .post('/api/file/upload')
+                                .field('passcode', 'passcode')
+                                .field('path', '/testFile.txt')
+                                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                                .set('Authorization', token)
+                                .end((err, res) => {
+                                    res.should.have.status(201);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    
+                                    // get file array
+                                    chai.request(server)
+                                        .get('/api/file')
+                                        .set('Authorization', token)
+                                        .end((err, res) => {
+                                            res.should.have.status(200);
+                                            res.body.should.be.a('object');
+                                            res.body.should.have.property('success').eql(true);
+                                            res.body.should.have.property('files').with.lengthOf(1);
+
+                                            // construct body
+                                            const body = {
+                                                "path": "/testFile.txt",
+                                                "user": "testUser@mail.com"
+                                            }
+                                            // attempt to share file
+                                            chai.request(server)
+                                            .put('/api/file/{id}/share')
+                                            .query('id', res.body.id)
+                                            .set('Authorization', token)
+                                            .send(body)
+                                            .end((err, res) => {
+                                                res.should.have.status(204);
+
+                                                // get file array as second user
+                                                chai.request(server)
+                                                .get('/api/file')
+                                                .set('Authorization', secondAuth)
+                                                .end((err, res) => {
+                                                    res.should.have.status(200);
+                                                    res.body.should.be.a('object');
+                                                    res.body.should.have.property('success').eql(true);
+                                                    res.body.should.have.property('sharedFiles').with.lengthOf(1);
+
+                                                    done();
+                                                });
+                                            });
+                                        });
+                                });
+                        });
+                });
+        });
+
+        it('should fail to share a file with missing "path" param', (done) => {
+            // create user
+            const user = {
+                "firstname": "John",
+                "surname": "Doe",
+                "email": "testUser@mail.com",
+                "password": "password"
+            }
+            chai.request(server)
+                .post('/api/user/register')
+                .send(user)
+                .end((err, res) => {
+                    const authBody = {
+                        "email": "testUser@mail.com",
+                        "password": "password"
+                    }
+                    // authenticate user
+                    chai.request(server)
+                        .post('/api/user/authenticate')
+                        .send(authBody)
+                        .end((err, res) => {
+                            const secondAuth = res.body.token;
+
+                            // upload file
+                            chai.request(server)
+                                .post('/api/file/upload')
+                                .field('passcode', 'passcode')
+                                .field('path', '/testFile.txt')
+                                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                                .set('Authorization', token)
+                                .end((err, res) => {
+                                    res.should.have.status(201);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    
+                                    // get file array
+                                    chai.request(server)
+                                        .get('/api/file')
+                                        .set('Authorization', token)
+                                        .end((err, res) => {
+                                            res.should.have.status(200);
+                                            res.body.should.be.a('object');
+                                            res.body.should.have.property('success').eql(true);
+                                            res.body.should.have.property('files').with.lengthOf(1);
+
+                                            // construct body
+                                            const body = {
+                                                "user": "testUser@mail.com"
+                                            }
+                                            // attempt to share file
+                                            chai.request(server)
+                                            .put('/api/file/{id}/share')
+                                            .query('id', res.body.id)
+                                            .set('Authorization', token)
+                                            .send(body)
+                                            .end((err, res) => {
+                                                res.should.have.status(400);
+
+                                                done();
+                                            });
+                                        });
+                                });
+                        });
+                });
+        });
+
+        it('should fail to share a file with missing "user" param', (done) => {
+            // create user
+            const user = {
+                "firstname": "John",
+                "surname": "Doe",
+                "email": "testUser@mail.com",
+                "password": "password"
+            }
+            chai.request(server)
+                .post('/api/user/register')
+                .send(user)
+                .end((err, res) => {
+                    const authBody = {
+                        "email": "testUser@mail.com",
+                        "password": "password"
+                    }
+                    // authenticate user
+                    chai.request(server)
+                        .post('/api/user/authenticate')
+                        .send(authBody)
+                        .end((err, res) => {
+                            const secondAuth = res.body.token;
+
+                            // upload file
+                            chai.request(server)
+                                .post('/api/file/upload')
+                                .field('passcode', 'passcode')
+                                .field('path', '/testFile.txt')
+                                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                                .set('Authorization', token)
+                                .end((err, res) => {
+                                    res.should.have.status(201);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    
+                                    // get file array
+                                    chai.request(server)
+                                        .get('/api/file')
+                                        .set('Authorization', token)
+                                        .end((err, res) => {
+                                            res.should.have.status(200);
+                                            res.body.should.be.a('object');
+                                            res.body.should.have.property('success').eql(true);
+                                            res.body.should.have.property('files').with.lengthOf(1);
+
+                                            // construct body
+                                            const body = {
+                                                "path": "/testFile.txt"
+                                            }
+                                            // attempt to share file
+                                            chai.request(server)
+                                            .put('/api/file/{id}/share')
+                                            .query('id', res.body.id)
+                                            .set('Authorization', token)
+                                            .send(body)
+                                            .end((err, res) => {
+                                                res.should.have.status(400);
+
+                                                done();
+                                            });
+                                        });
+                                });
+                        });
+                });
+        });
+
+        it('should fail to share a file with an invalid user', (done) => {
+            // upload file
+            chai.request(server)
+                .post('/api/file/upload')
+                .field('passcode', 'passcode')
+                .field('path', '/testFile.txt')
+                .attach('file', './backend/test/resources/api/file/testFile.txt', 'testFile.txt')
+                .set('Authorization', token)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get file array
+                    chai.request(server)
+                        .get('/api/file')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('files').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "path": "/testFile.txt",
+                                "user": "testUser@mail.com"
+                            }
+                            // attempt to share file
+                            chai.request(server)
+                            .put('/api/file/{id}/share')
                             .query('id', res.body.id)
                             .set('Authorization', token)
                             .send(body)

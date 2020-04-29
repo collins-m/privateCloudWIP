@@ -135,6 +135,21 @@ module.exports.updateFavouriteStatus = function(file, favourite, callback){
 }
 
 /**
+* [share file]
+* @param {[Document]} file [File in question]
+* @param {[String]} user [user to share file with]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.share = function(file, user, callback){
+    if (!file.accessList.includes(user)) {
+        file.accessList.push(user);
+    } else {
+        file.accessList.pop(user);
+    }
+    file.save(callback);
+}
+
+/**
  * [delete all files under a certain user account]
  * @param {[String]} user [String denoting the associated user's email]
  * @return {[null]}

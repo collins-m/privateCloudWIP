@@ -52,15 +52,22 @@ describe('Folders', () => {
     });
     afterEach((done) => {
         Folder.deleteMany({}, () => {
-            done();
+            const query = {
+                "email": "testUser@mail.com"
+            }
+            User.deleteOne(query, () => {
+                done();
+            });
         });
     });
     // after class
     after((done) => {
         rimraf('./public/johndoe@mail.com', () => {
-            Folder.deleteMany({}, () => {
-                User.deleteMany({}, () => {
-                    done();
+            rimraf('./public/testUser@mail.com', () => {
+                Folder.deleteMany({}, () => {
+                    User.deleteMany({}, () => {
+                        done();
+                    });
                 });
             });
         });
@@ -761,6 +768,269 @@ describe('Folders', () => {
                             // attempt to delete file
                             chai.request(server)
                             .delete('/api/folder/{id}')
+                            .query('id', res.body.id)
+                            .set('Authorization', token)
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(404);
+
+                                done();
+                            });
+                        });
+                });
+        });
+    });
+
+    context('share folder use cases', () => {
+        it('should share a folder successfully', (done) => {
+            // create user
+            const user = {
+                "firstname": "John",
+                "surname": "Doe",
+                "email": "testUser@mail.com",
+                "password": "password"
+            }
+            chai.request(server)
+                .post('/api/user/register')
+                .send(user)
+                .end((err, res) => {
+                    const authBody = {
+                        "email": "testUser@mail.com",
+                        "password": "password"
+                    }
+                    // authenticate user
+                    chai.request(server)
+                        .post('/api/user/authenticate')
+                        .send(authBody)
+                        .end((err, res) => {
+                            const secondAuth = res.body.token;
+
+                            // build request body
+                            const body = {
+                                "folderName": "testFolder",
+                                "path": "/testFolder"
+                            }
+                            chai.request(server)
+                                .post('/api/folder/create')
+                                .set('Authorization', token)
+                                .send(body)
+                                .end((err, res) => {
+                                    res.should.have.status(201);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    
+                                    // get folder array
+                                    chai.request(server)
+                                        .get('/api/folder')
+                                        .set('Authorization', token)
+                                        .end((err, res) => {
+                                            res.should.have.status(200);
+                                            res.body.should.be.a('object');
+                                            res.body.should.have.property('success').eql(true);
+                                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                                            // construct body
+                                            const body = {
+                                                "path": "/testFolder",
+                                                "user": "testUser@mail.com"
+                                            }
+                                            // attempt to share folder
+                                            chai.request(server)
+                                            .put('/api/folder/{id}/share')
+                                            .query('id', res.body.id)
+                                            .set('Authorization', token)
+                                            .send(body)
+                                            .end((err, res) => {
+                                                res.should.have.status(204);
+
+                                                // get folder array as second user
+                                                chai.request(server)
+                                                .get('/api/folder')
+                                                .set('Authorization', secondAuth)
+                                                .end((err, res) => {
+                                                    res.should.have.status(200);
+                                                    res.body.should.be.a('object');
+                                                    res.body.should.have.property('success').eql(true);
+                                                    res.body.should.have.property('sharedFolders').with.lengthOf(1);
+
+                                                    done();
+                                                });
+                                            });
+                                        });
+                                });
+                        });
+                });
+        });
+
+        it('should fail to share a folder with missing "path" param', (done) => {
+            // create user
+            const user = {
+                "firstname": "John",
+                "surname": "Doe",
+                "email": "testUser@mail.com",
+                "password": "password"
+            }
+            chai.request(server)
+                .post('/api/user/register')
+                .send(user)
+                .end((err, res) => {
+                    const authBody = {
+                        "email": "testUser@mail.com",
+                        "password": "password"
+                    }
+                    // authenticate user
+                    chai.request(server)
+                        .post('/api/user/authenticate')
+                        .send(authBody)
+                        .end((err, res) => {
+                            const secondAuth = res.body.token;
+
+                            // build request body
+                            const body = {
+                                "folderName": "testFolder",
+                                "path": "/testFolder"
+                            }
+                            chai.request(server)
+                                .post('/api/folder/create')
+                                .set('Authorization', token)
+                                .send(body)
+                                .end((err, res) => {
+                                    res.should.have.status(201);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    
+                                    // get folder array
+                                    chai.request(server)
+                                        .get('/api/folder')
+                                        .set('Authorization', token)
+                                        .end((err, res) => {
+                                            res.should.have.status(200);
+                                            res.body.should.be.a('object');
+                                            res.body.should.have.property('success').eql(true);
+                                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                                            // construct body
+                                            const body = {
+                                                "user": "testUser@mail.com"
+                                            }
+                                            // attempt to share folder
+                                            chai.request(server)
+                                            .put('/api/folder/{id}/share')
+                                            .query('id', res.body.id)
+                                            .set('Authorization', token)
+                                            .send(body)
+                                            .end((err, res) => {
+                                                res.should.have.status(400);
+
+                                                done();
+                                            });
+                                        });
+                                });
+                        });
+                });
+        });
+
+        it('should fail to share a folder with missing "user" param', (done) => {
+            // create user
+            const user = {
+                "firstname": "John",
+                "surname": "Doe",
+                "email": "testUser@mail.com",
+                "password": "password"
+            }
+            chai.request(server)
+                .post('/api/user/register')
+                .send(user)
+                .end((err, res) => {
+                    const authBody = {
+                        "email": "testUser@mail.com",
+                        "password": "password"
+                    }
+                    // authenticate user
+                    chai.request(server)
+                        .post('/api/user/authenticate')
+                        .send(authBody)
+                        .end((err, res) => {
+                            const secondAuth = res.body.token;
+
+                            // build request body
+                            const body = {
+                                "folderName": "testFolder",
+                                "path": "/testFolder"
+                            }
+                            chai.request(server)
+                                .post('/api/folder/create')
+                                .set('Authorization', token)
+                                .send(body)
+                                .end((err, res) => {
+                                    res.should.have.status(201);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('success').eql(true);
+                                    
+                                    // get folder array
+                                    chai.request(server)
+                                        .get('/api/folder')
+                                        .set('Authorization', token)
+                                        .end((err, res) => {
+                                            res.should.have.status(200);
+                                            res.body.should.be.a('object');
+                                            res.body.should.have.property('success').eql(true);
+                                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                                            // construct body
+                                            const body = {
+                                                "path": "/testFolder"
+                                            }
+                                            // attempt to share folder
+                                            chai.request(server)
+                                            .put('/api/folder/{id}/share')
+                                            .query('id', res.body.id)
+                                            .set('Authorization', token)
+                                            .send(body)
+                                            .end((err, res) => {
+                                                res.should.have.status(400);
+
+                                                done();
+                                            });
+                                        });
+                                });
+                        });
+                });
+        });
+
+        it('should fail to share a folder with an invalid user', (done) => {
+            // build request body
+            const body = {
+                "folderName": "testFolder",
+                "path": "/testFolder"
+            }
+            chai.request(server)
+                .post('/api/folder/create')
+                .set('Authorization', token)
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success').eql(true);
+                    
+                    // get folder array
+                    chai.request(server)
+                        .get('/api/folder')
+                        .set('Authorization', token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('success').eql(true);
+                            res.body.should.have.property('folders').with.lengthOf(1);
+
+                            // construct body
+                            const body = {
+                                "path": "/testFolder",
+                                "user": "testUser@mail.com"
+                            }
+                            // attempt to share folder
+                            chai.request(server)
+                            .put('/api/folder/{id}/share')
                             .query('id', res.body.id)
                             .set('Authorization', token)
                             .send(body)
