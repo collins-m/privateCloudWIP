@@ -4,7 +4,6 @@ const zlib = require('zlib');
 const crypto = require('crypto');
 
 const AppendInitVector = require('../config/appendInitVector');
-const constants = require('../../../constants');
 
 // file schema
 const FileSchema = mongoose.Schema({
@@ -32,6 +31,11 @@ const FileSchema = mongoose.Schema({
     favourite: {
         type: Boolean,
         default: false,
+        required: true
+    },
+    accessList: {
+        type: [String],
+        default: [],
         required: true
     }
 });
@@ -70,6 +74,18 @@ module.exports.getFileByPath = function(user, path, callback){
 module.exports.getFilesByUser = function(user, callback){
     const query = {
         owner: user,
+    }
+    File.find(query, callback);
+}
+
+/**
+* [find files by accessList]
+* @param {[String]} user [user pertaining to files]
+* @return {[JSON]} [file objects]
+*/
+module.exports.getFilesByArrayList = function(user, callback){
+    const query = {
+        accessList: user,
     }
     File.find(query, callback);
 }

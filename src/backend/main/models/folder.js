@@ -19,6 +19,11 @@ const FolderSchema = mongoose.Schema({
         type: Boolean,
         default: false,
         required: true
+    },
+    accessList: {
+        type: [String],
+        default: [],
+        required: true
     }
 });
 
@@ -33,6 +38,18 @@ const Folder = module.exports = mongoose.model('Folder', FolderSchema);
 module.exports.getFoldersByUser = function(user, callback){
     const query = {
         owner: user,
+    }
+    Folder.find(query, callback);
+}
+
+/**
+* [find folders by accessList]
+* @param {[String]} user [user pertaining to folders]
+* @return {[JSON]} [folder objects]
+*/
+module.exports.getFoldersByArrayList = function(user, callback){
+    const query = {
+        accessList: user,
     }
     Folder.find(query, callback);
 }
@@ -106,6 +123,21 @@ module.exports.updateName = function(folder, newName, callback){
 */
 module.exports.updateFavouriteStatus = function(folder, favourite, callback){
     folder.favourite = favourite;
+    folder.save(callback);
+}
+
+/**
+* [share folder]
+* @param {[Document]} folder [Folder in question]
+* @param {[String]} user [user to share folder with]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.share = function(folder, user, callback){
+    if (!folder.accessList.includes(user)) {
+        folder.accessList.push(user);
+    } else {
+        folder.accessList.pop(user);
+    }
     folder.save(callback);
 }
 
