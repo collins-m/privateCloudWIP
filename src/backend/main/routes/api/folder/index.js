@@ -9,6 +9,10 @@ FolderRouter.route('/:id')
   .put(require('./update.js'))
   .delete(require('./delete.js'));
 
+// share a folder
+FolderRouter.route('/:id/share')
+  .put(require('./share.js'));
+
 // create new folder
 FolderRouter.route('/create')
   .post(require('./create.js'));

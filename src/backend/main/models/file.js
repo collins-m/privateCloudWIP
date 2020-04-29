@@ -4,7 +4,6 @@ const zlib = require('zlib');
 const crypto = require('crypto');
 
 const AppendInitVector = require('../config/appendInitVector');
-const constants = require('../../../constants');
 
 // file schema
 const FileSchema = mongoose.Schema({
@@ -32,6 +31,11 @@ const FileSchema = mongoose.Schema({
     favourite: {
         type: Boolean,
         default: false,
+        required: true
+    },
+    accessList: {
+        type: [String],
+        default: [],
         required: true
     }
 });
@@ -70,6 +74,18 @@ module.exports.getFileByPath = function(user, path, callback){
 module.exports.getFilesByUser = function(user, callback){
     const query = {
         owner: user,
+    }
+    File.find(query, callback);
+}
+
+/**
+* [find files by accessList]
+* @param {[String]} user [user pertaining to files]
+* @return {[JSON]} [file objects]
+*/
+module.exports.getFilesByArrayList = function(user, callback){
+    const query = {
+        accessList: user,
     }
     File.find(query, callback);
 }
@@ -115,6 +131,21 @@ module.exports.updateName = function(file, newName, callback){
 */
 module.exports.updateFavouriteStatus = function(file, favourite, callback){
     file.favourite = favourite;
+    file.save(callback);
+}
+
+/**
+* [share file]
+* @param {[Document]} file [File in question]
+* @param {[String]} user [user to share file with]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.share = function(file, user, callback){
+    if (!file.accessList.includes(user)) {
+        file.accessList.push(user);
+    } else {
+        file.accessList.pop(user);
+    }
     file.save(callback);
 }
 

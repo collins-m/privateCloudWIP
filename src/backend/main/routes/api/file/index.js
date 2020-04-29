@@ -13,4 +13,8 @@ FileRouter.route('/:id')
   .put(require('./update.js'))
   .delete(require('./delete.js'));
 
+// share a file
+FileRouter.route('/:id/share')
+  .put(require('./share.js'));
+
 module.exports = FileRouter;

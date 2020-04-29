@@ -132,6 +132,94 @@
   },
   {
     "type": "PUT",
+    "url": "/api/file/share",
+    "title": "Share/Unshare File",
+    "name": "ShareFile",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>Path that foler is currently located</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "user",
+            "description": "<p>User email to share the file with</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "204 Response": [
+          {
+            "group": "204 Response",
+            "type": "null",
+            "optional": false,
+            "field": "null",
+            "description": "<p>No body is returned with this response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/share.js",
+    "groupTitle": "File"
+  },
+  {
+    "type": "PUT",
     "url": "/api/file/{id}",
     "title": "Update File",
     "name": "UpdateFile",
@@ -542,6 +630,94 @@
     },
     "version": "0.0.0",
     "filename": "backend/main/routes/api/folder/userFolders.js",
+    "groupTitle": "Folder"
+  },
+  {
+    "type": "PUT",
+    "url": "/api/folder/share",
+    "title": "Share/Unshare Folder",
+    "name": "ShareFolder",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>Path that foler is currently located</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "user",
+            "description": "<p>User email to share the folder with</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "204 Response": [
+          {
+            "group": "204 Response",
+            "type": "null",
+            "optional": false,
+            "field": "null",
+            "description": "<p>No body is returned with this response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/share.js",
     "groupTitle": "Folder"
   },
   {
