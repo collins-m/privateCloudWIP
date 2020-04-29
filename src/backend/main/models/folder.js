@@ -9,6 +9,10 @@ const FolderSchema = mongoose.Schema({
     path: {
         type: String,
         required: true,
+    },
+    serverPath: {
+        type: String,
+        required: true,
         unique: true
     },
     owner: {
