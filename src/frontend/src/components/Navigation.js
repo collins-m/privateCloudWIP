@@ -5,7 +5,7 @@ class Navigation extends Component{
     //Logout will accept an event object 
     logOut(e){
         e.preventDefault() //prevent the defualt action of logout function
-        localStorage.removeItem('usrtoken') //local storage token
+        localStorage.removeItem('usertoken') //local storage token
         this.props.history.push('/') //push url to Homepage component
     }
 
@@ -34,6 +34,7 @@ class Navigation extends Component{
                         User
                     </Link>
                 </li>
+                
                 <li className="nav-item">
                     <a href="" onClick={this.logOut.bind(this)} className ="nav-link">
                         Logout

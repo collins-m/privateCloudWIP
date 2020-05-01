@@ -7,7 +7,7 @@ class HomePage extends Component{
             <div className= "container"> 
                 <div className= "Jumbotron mt-5">
                     <div className="col-sm-8 mx-auto">
-                        <h1 className="text-center">WELCOME</h1>
+                        <div className="text-center">Welcome</div>
                     </div>
                 </div>
             </div>
