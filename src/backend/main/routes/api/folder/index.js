@@ -4,9 +4,14 @@ const FolderRouter = require('express').Router();
 FolderRouter.route('/')
   .get(require('./userFolders.js'));
 
-// move a file
+// update a folder
 FolderRouter.route('/:id')
-  .put(require('./move.js'));
+  .put(require('./update.js'))
+  .delete(require('./delete.js'));
+
+// share a folder
+FolderRouter.route('/:id/share')
+  .put(require('./share.js'));
 
 // create new folder
 FolderRouter.route('/create')

@@ -1,5 +1,93 @@
 define({ "api": [
   {
+    "type": "DELETE",
+    "url": "/api/file/{id}",
+    "title": "Delete File",
+    "name": "DeleteFile",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>Path that file is currently located</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200 Response": [
+          {
+            "group": "200 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/delete.js",
+    "groupTitle": "File"
+  },
+  {
     "type": "GET",
     "url": "/api/file",
     "title": "Get User Files",
@@ -44,9 +132,9 @@ define({ "api": [
   },
   {
     "type": "PUT",
-    "url": "/api/file/{id}",
-    "title": "Move File",
-    "name": "MoveFile",
+    "url": "/api/file/share",
+    "title": "Share/Unshare File",
+    "name": "ShareFile",
     "group": "File",
     "header": {
       "fields": {
@@ -68,15 +156,15 @@ define({ "api": [
             "group": "Request Body",
             "type": "String",
             "optional": false,
-            "field": "oldPath",
-            "description": "<p>Path that file is currently located</p>"
+            "field": "path",
+            "description": "<p>Path that foler is currently located</p>"
           },
           {
             "group": "Request Body",
             "type": "String",
             "optional": false,
-            "field": "newPath",
-            "description": "<p>Path that user wishes to move file to</p>"
+            "field": "user",
+            "description": "<p>User email to share the file with</p>"
           }
         ]
       }
@@ -127,7 +215,109 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "backend/main/routes/api/file/move.js",
+    "filename": "backend/main/routes/api/file/share.js",
+    "groupTitle": "File"
+  },
+  {
+    "type": "PUT",
+    "url": "/api/file/{id}",
+    "title": "Update File",
+    "name": "UpdateFile",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "oldPath",
+            "description": "<p>Path that file is currently located</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": true,
+            "field": "newPath",
+            "description": "<p>Path that user wishes to move file to</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": true,
+            "field": "newName",
+            "description": "<p>Name that user wishes to change folder to</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "Boolean",
+            "optional": true,
+            "field": "favourite",
+            "description": "<p>Favourite flag</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "204 Response": [
+          {
+            "group": "204 Response",
+            "type": "null",
+            "optional": false,
+            "field": "null",
+            "description": "<p>No body is returned with this response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/file/update.js",
     "groupTitle": "File"
   },
   {
@@ -171,7 +361,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "path",
-            "description": "<p>absolute path of file as seen by the front end user</p>"
+            "description": "<p>Absolute path of file</p>"
           }
         ]
       }
@@ -219,8 +409,8 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/api/folder/create",
-    "title": "Create User Folder",
-    "name": "GetFolders",
+    "title": "Create Folder",
+    "name": "CreateFolder",
     "group": "Folder",
     "header": {
       "fields": {
@@ -250,7 +440,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "path",
-            "description": "<p>Path of folder (beigins with '/')</p>"
+            "description": "<p>Absolute path of folder</p>"
           }
         ]
       }
@@ -312,6 +502,94 @@ define({ "api": [
     "groupTitle": "Folder"
   },
   {
+    "type": "DELETE",
+    "url": "/api/folder/{id}",
+    "title": "Delete Folder",
+    "name": "DeleteFolder",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>Path that foler is currently located</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200 Response": [
+          {
+            "group": "200 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "200 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/delete.js",
+    "groupTitle": "Folder"
+  },
+  {
     "type": "GET",
     "url": "/api/folder",
     "title": "Get User Folders",
@@ -356,9 +634,9 @@ define({ "api": [
   },
   {
     "type": "PUT",
-    "url": "/api/folder/{id}",
-    "title": "Move Folder",
-    "name": "MoveFolder",
+    "url": "/api/folder/share",
+    "title": "Share/Unshare Folder",
+    "name": "ShareFolder",
     "group": "Folder",
     "header": {
       "fields": {
@@ -380,15 +658,15 @@ define({ "api": [
             "group": "Request Body",
             "type": "String",
             "optional": false,
-            "field": "oldPath",
+            "field": "path",
             "description": "<p>Path that foler is currently located</p>"
           },
           {
             "group": "Request Body",
             "type": "String",
             "optional": false,
-            "field": "newPath",
-            "description": "<p>Path that user wishes to move folder to</p>"
+            "field": "user",
+            "description": "<p>User email to share the folder with</p>"
           }
         ]
       }
@@ -439,7 +717,109 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "backend/main/routes/api/folder/move.js",
+    "filename": "backend/main/routes/api/folder/share.js",
+    "groupTitle": "Folder"
+  },
+  {
+    "type": "PUT",
+    "url": "/api/folder/{id}",
+    "title": "Update Folder",
+    "name": "UpdateFolder",
+    "group": "Folder",
+    "header": {
+      "fields": {
+        "Authorization": [
+          {
+            "group": "Authorization",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User's unique bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "oldPath",
+            "description": "<p>Path that foler is currently located</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": true,
+            "field": "newPath",
+            "description": "<p>Path that user wishes to move folder to</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": true,
+            "field": "newName",
+            "description": "<p>Name that user wishes to change folder to</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "Boolean",
+            "optional": true,
+            "field": "favourite",
+            "description": "<p>Favourite flag</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "204 Response": [
+          {
+            "group": "204 Response",
+            "type": "null",
+            "optional": false,
+            "field": "null",
+            "description": "<p>No body is returned with this response</p>"
+          }
+        ],
+        "400 Response": [
+          {
+            "group": "400 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "400 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ],
+        "404 Response": [
+          {
+            "group": "404 Response",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success state of operation</p>"
+          },
+          {
+            "group": "404 Response",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Description of response</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "backend/main/routes/api/folder/update.js",
     "groupTitle": "Folder"
   },
   {
@@ -547,7 +927,7 @@ define({ "api": [
   },
   {
     "type": "DELETE",
-    "url": "/api/user/",
+    "url": "/api/user/{id}",
     "title": "Delete User",
     "name": "DeleteUser",
     "group": "User",
@@ -566,16 +946,16 @@ define({ "api": [
     },
     "success": {
       "fields": {
-        "200": [
+        "200 Response": [
           {
-            "group": "200",
+            "group": "200 Response",
             "type": "Boolean",
             "optional": false,
             "field": "success",
             "description": "<p>Success state of operation</p>"
           },
           {
-            "group": "200",
+            "group": "200 Response",
             "type": "String",
             "optional": false,
             "field": "msg",
@@ -590,7 +970,7 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/api/user/",
+    "url": "/api/user/{id}",
     "title": "Get User",
     "name": "GetUser",
     "group": "User",

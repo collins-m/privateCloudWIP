@@ -7,14 +7,14 @@ const Folder = require('../../../models/folder');
 const router = express.Router();
 
 /**
- * @api {POST} /api/folder/create                       Create User Folder
- * @apiName GetFolders
+ * @api {POST} /api/folder/create                       Create Folder
+ * @apiName CreateFolder
  * @apiGroup Folder
  * 
  * @apiHeader   (Authorization) {String}    token       User's unique bearer token
  * 
  * @apiParam    (Request Body)  {String}    folderName  Name of folder
- * @apiParam    (Request Body)  {String}    path        Path of folder (beigins with '/')
+ * @apiParam    (Request Body)  {String}    path        Absolute path of folder
  * 
  * @apiSuccess  (201 Response)  {Boolean}   success     Success state of operation
  * @apiSuccess  (201 Response)  {Array}     msg         Description of response
@@ -35,6 +35,7 @@ router.post('/create', passport.authenticate('jwt', {session:false}), (req, res,
     let newFolder = new Folder({
         folderName: req.body.folderName,
         path: req.body.path,
+        serverPath: req.user.email + '/' + req.body.path,
         owner: req.user.email
     });
 

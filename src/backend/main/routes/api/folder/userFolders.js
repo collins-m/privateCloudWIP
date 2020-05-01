@@ -16,25 +16,43 @@ const router = express.Router();
  * @apiSuccess  (200 Response)  {Array}     files       Array of user's files
 */
 router.get('/', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-    // get all folders pertaining to a user
+    // get all folders owned by a user
     Folder.getFoldersByUser(req.user.email, (err, folders) => {
         if (err) throw err;
 
         // format response
         let folderArray = [];
         folders.forEach(folder => {
-            const path = folder.path;
             folderArray.push({
                 id: folder._id,
                 folderName: folder.folderName,
-                path: path
+                path: folder.path,
+                favourite: folder.favourite,
+                accessList: folder.accessList
             });
         });
 
-        // return folders
-        return res
-            .status(200)
-            .json({success: true, folders: folderArray});
+        // get all folders shared with a user
+        Folder.getFoldersByArrayList(req.user.email, (err, folders) => {
+            if (err) throw err;
+
+            // format response
+            let sharedFoldersArray = [];
+            folders.forEach(folder => {
+                sharedFoldersArray.push({
+                    id: folder._id,
+                    folderName: folder.folderName,
+                    path: folder.path,
+                    favourite: folder.favourite,
+                    accessList: folder.accessList
+                });
+            });
+
+            // return folders
+            return res
+                .status(200)
+                .json({success: true, folders: folderArray, sharedFolders: sharedFoldersArray});
+        });
     });
 });
 

@@ -23,18 +23,36 @@ router.get('/', passport.authenticate('jwt', {session:false}), (req, res, next) 
         // format response
         let fileArray = [];
         files.forEach(file => {
-            const path = file.path;
             fileArray.push({
                 id: file._id,
                 filename: file.originalFilename,
-                path: path
+                path: file.path,
+                favourite: file.favourite,
+                accessList: file.accessList
             });
         });
 
-        // return files
-        return res
-            .status(200)
-            .json({success: true, files: fileArray});
+        // get all files shared with a user
+        File.getFilesByArrayList(req.user.email, (err, files) => {
+            if (err) throw err;
+
+            // format response
+            let sharedFilesArray = [];
+            files.forEach(file => {
+                sharedFilesArray.push({
+                    id: file._id,
+                    fileName: file.originalFilename,
+                    path: file.path,
+                    favourite: file.favourite,
+                    accessList: file.accessList
+                });
+            });
+
+            // return files
+            return res
+                .status(200)
+                .json({success: true, files: fileArray, sharedFiles: sharedFilesArray});
+        });
     });
 });
 

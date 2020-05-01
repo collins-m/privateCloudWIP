@@ -4,7 +4,6 @@ const zlib = require('zlib');
 const crypto = require('crypto');
 
 const AppendInitVector = require('../config/appendInitVector');
-const constants = require('../../../constants');
 
 // file schema
 const FileSchema = mongoose.Schema({
@@ -27,6 +26,16 @@ const FileSchema = mongoose.Schema({
     },
     owner: {
         type: String,
+        required: true
+    },
+    favourite: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    accessList: {
+        type: [String],
+        default: [],
         required: true
     }
 });
@@ -70,6 +79,18 @@ module.exports.getFilesByUser = function(user, callback){
 }
 
 /**
+* [find files by accessList]
+* @param {[String]} user [user pertaining to files]
+* @return {[JSON]} [file objects]
+*/
+module.exports.getFilesByArrayList = function(user, callback){
+    const query = {
+        accessList: user,
+    }
+    File.find(query, callback);
+}
+
+/**
 * [add a new file]
 * @param {[File]} newFile [File object as per above schema]
 * @return {[JSON]} [success/failure]
@@ -87,6 +108,45 @@ module.exports.addFile = function(newFile, callback){
 module.exports.updatePath = function(file, newPath, callback){
         file.path = newPath;
         file.save(callback);
+}
+
+/**
+* [update file name]
+* @param {[Document]} file [File in question]
+* @param {[String]} newName [new name of file]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.updateName = function(file, newName, callback){
+    const newPath = file.path.split('/').slice(0, -1).join('/') + '/' + newName;
+    file.originalFilename = newName;
+    file.path = newPath;
+    file.save(callback);
+}
+
+/**
+* [update file path]
+* @param {[Document]} file [File in question]
+* @param {[Boolean]} favourite [favourite status of file]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.updateFavouriteStatus = function(file, favourite, callback){
+    file.favourite = favourite;
+    file.save(callback);
+}
+
+/**
+* [share file]
+* @param {[Document]} file [File in question]
+* @param {[String]} user [user to share file with]
+* @return {[JSON]} [success/failure]
+*/
+module.exports.share = function(file, user, callback){
+    if (!file.accessList.includes(user)) {
+        file.accessList.push(user);
+    } else {
+        file.accessList.pop(user);
+    }
+    file.save(callback);
 }
 
 /**

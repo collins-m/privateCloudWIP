@@ -8,8 +8,13 @@ FileRouter.route('/')
 FileRouter.route('/upload')
   .post(require('./upload.js'));
 
-// move a file
+// update a file
 FileRouter.route('/:id')
-  .put(require('./move.js'));
+  .put(require('./update.js'))
+  .delete(require('./delete.js'));
+
+// share a file
+FileRouter.route('/:id/share')
+  .put(require('./share.js'));
 
 module.exports = FileRouter;
