@@ -5,7 +5,7 @@ class Navigation extends Component{
     //Logout will accept an event object 
     logOut(e){
         e.preventDefault() //prevent the defualt action of logout function
-        localStorage.removeItem('usertoken') //local storage token
+        localStorage.removeItem('usrtoken') //local storage token
         this.props.history.push('/') //push url to Homepage component
     }
 
@@ -24,6 +24,11 @@ class Navigation extends Component{
                         Register
                     </Link>
                 </li>
+                <li className="nav-item">
+                    <Link to="/uploadFile" className ="nav-link">
+                        Upload
+                    </Link>
+                </li>
             </ul>
         )
         //next group of unordered list for profile
@@ -34,7 +39,6 @@ class Navigation extends Component{
                         User
                     </Link>
                 </li>
-                
                 <li className="nav-item">
                     <a href="" onClick={this.logOut.bind(this)} className ="nav-link">
                         Logout

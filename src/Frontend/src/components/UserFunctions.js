@@ -19,7 +19,7 @@ export const logon = user => {
         email: user.email, 
         password: user.password //Post with two parameters to backend
     }).then(res => {
-        localStorage.setItem('usertoken', res.data.token) //tolen saved in local storage usertoken
+        localStorage.setItem('usrtoken', res.data.token) //tolen saved in local storage usertoken
         return res.data
     }).catch(err => {
         console.log(err)
