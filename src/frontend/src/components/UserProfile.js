@@ -12,7 +12,7 @@ class UserProfile extends Component{
     }
 
     componentDidMount(){
-        const token = localStorage.usrtoken //localstorage token
+        const token = localStorage.usertoken //localstorage token
         const decoded = jwt_decode(token) 
         this.setState({ //set states will automatically update states
             firstname: decoded.data.firstname,

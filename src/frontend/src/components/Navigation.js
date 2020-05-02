@@ -34,7 +34,11 @@ class Navigation extends Component{
                         User
                     </Link>
                 </li>
-                
+                <li className="nav-item">
+                    <Link to="/upload" className ="nav-link">
+                        Upload
+                    </Link>
+                </li>
                 <li className="nav-item">
                     <a href="" onClick={this.logOut.bind(this)} className ="nav-link">
                         Logout
