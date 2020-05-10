@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
+import ReactDOM from "react-dom";//NEW
 import {BrowserRouter as Router, Route} from 'react-router-dom'
+import "./components/styles.css"; //NEW
 
 import Navigation from './components/Navigation'
 import HomePage from './components/HomePage'
@@ -7,9 +9,7 @@ import SignIn from './components/SignIn'
 import Registration from './components/Registration'
 import UserProfile from './components/UserProfile'
 import FileUpload from './components/FileUpload'
-
-
-//import Sidebar from './Sidebar'
+import Sidebar from './components/Sidebar';
 
 class App extends Component {
   //wrapping application with Router Component
@@ -19,6 +19,7 @@ class App extends Component {
     return (
       <Router> 
         <div className= "App">
+        <Sidebar/> 
           <Navigation/>
           <Route exact path="/" component={HomePage}/>
           <div className="container">
