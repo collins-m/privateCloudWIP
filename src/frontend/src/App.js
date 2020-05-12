@@ -10,6 +10,7 @@ import Registration from './components/Registration'
 import UserProfile from './components/UserProfile'
 import FileUpload from './components/FileUpload'
 import Sidebar from './components/Sidebar';
+import UploadedFiles from './components/UploadedFiles'
 
 class App extends Component {
   //wrapping application with Router Component
@@ -27,6 +28,7 @@ class App extends Component {
             <Route exact path="/logon" component={SignIn}/>
             <Route exact path="/userprofile" component={UserProfile}/>
             <Route exact path="/upload" component={FileUpload}/>
+            <Route exact path="/uploadedFiles" component={UploadedFiles}/>
           </div>
         </div>
       </Router>

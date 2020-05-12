@@ -48,7 +48,7 @@ class Navigation extends Component{
         )// logOut function to call logOut function above
 
         return(
-            <nav className="menu-item">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark rounded">
                 <button className="navbar-toggler"
                     type="button"
                     data-toggle="collapse"
