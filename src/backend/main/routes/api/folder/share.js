@@ -7,7 +7,7 @@ const User = require('../../../models/user');
 const router = express.Router();
 
 /**
- * @api {PUT} /api/folder/share                         Share/Unshare Folder
+ * @api {PUT} /api/folder/{id}/share                    Share/Unshare Folder
  * @apiName ShareFolder
  * @apiGroup Folder
  * 
