@@ -229,5 +229,8 @@ module.exports.moveAndDecryptFile = function(sourcePath, destPath, passcode, cal
             .pipe(decipher)
             .pipe(unzip)
             .pipe(writeStream);
+
+        // return write stream
+        return writeStream;
     });
 }
