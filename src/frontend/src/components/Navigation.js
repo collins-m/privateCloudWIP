@@ -40,10 +40,16 @@ class Navigation extends Component{
                     </Link>
                 </li>
                 <li className="nav-item">
+                    <a href="/UploadedFiles" className ="nav-link">
+                        View Files
+                    </a>
+                </li>
+                <li className="nav-item">
                     <a href="" onClick={this.logOut.bind(this)} className ="nav-link">
                         Logout
                     </a>
                 </li>
+                
             </ul>
         )// logOut function to call logOut function above
 

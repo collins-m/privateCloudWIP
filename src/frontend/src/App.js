@@ -12,11 +12,7 @@ import FileUpload from './components/FileUpload'
 import Sidebar from './components/Sidebar';
 import UploadedFiles from './components/UploadedFiles'
 
-const Child = ({match})=> console.log('match', match) || (
-  <div>
-    <h3>ID: {match.params.id}</h3>
-  </div>
-)
+
 class App extends Component {
   //wrapping application with Router Component
   //Navbar component will be positioned at the top of the window
@@ -34,8 +30,7 @@ class App extends Component {
             <Route exact path="/userprofile" component={UserProfile}/>
             <Route exact path="/upload" component={FileUpload}/>
             <Route exact path="/uploadedFiles" component={UploadedFiles}/>
-          </div>
-          <Route path= '/:id' component={Child}/>
+        </div>
         </div>
       </Router>
     )
