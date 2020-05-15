@@ -89,7 +89,7 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "/api/file/download",
+    "url": "/api/file/{id}/download",
     "title": "Download File",
     "name": "DownloadFile",
     "group": "File",
@@ -100,15 +100,8 @@ define({ "api": [
             "group": "Request Body",
             "type": "String",
             "optional": false,
-            "field": "fileName",
-            "description": "<p>File that user wishes to download</p>"
-          },
-          {
-            "group": "Request Body",
-            "type": "String",
-            "optional": false,
-            "field": "owner",
-            "description": "<p>User email - owner of the uploaded file</p>"
+            "field": "path",
+            "description": "<p>path of requested file</p>"
           },
           {
             "group": "Request Body",
