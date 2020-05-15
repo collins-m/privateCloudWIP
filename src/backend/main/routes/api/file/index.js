@@ -11,7 +11,11 @@ FileRouter.route('/upload')
 // update a file
 FileRouter.route('/:id')
   .put(require('./update.js'))
-  .delete(require('./delete.js'));
+  .delete(require('./delete.js'))
+
+// download a file
+FileRouter.route('/:id/download')
+  .post(require('./download.js'));
 
 // share a file
 FileRouter.route('/:id/share')
