@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import {Button, ButtonToolbar} from 'react-bootstrap'
 //import {ShareFolder} from './ShareFolder' //how to get function from different folder
-import {CreateFolder} from './CreateFolder'
+import CreateFolder from './CreateFolder'
+import ShareFile from './ShareFile' //how to get function from different file
+
 
 class GetFolder extends Component{
     state = {
@@ -76,9 +78,9 @@ class GetFolder extends Component{
                   const { id, folderName, path, favourite, accessList } = folder;
                   return (
                     <div key={id}>
-                      <p>{id}</p>
+                      <p>{folderName}</p>
                       <div>
-                      <p>{"path" + path}</p>
+                      <p>{}</p>
                       </div>
                       <div class="dropdown">
                           <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -88,7 +90,6 @@ class GetFolder extends Component{
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li><a href="#">Move</a></li>
                             <li><a href="#" onClick= {this.deleteFolder.bind(id)}>Delete</a></li>
-                            <li><a href="#" >Share with a friend</a></li>
                             <li role="separator" class="divider"></li>
                           </ul>
 
@@ -96,6 +97,16 @@ class GetFolder extends Component{
                      
                       <hr />
                       <ButtonToolbar>
+                      <Button
+                              variant= 'primary'
+                              onClick={()=> this.setState({showModel:true})}
+                              >Share</Button>
+                                
+                            <ShareFile 
+                            show= {this.state.showModel}
+                            onHide = {closeModel}
+                            />
+
                             <Button
                               variant= 'danger'
                               onClick={()=> this.setState({showModel:true})}
@@ -104,7 +115,10 @@ class GetFolder extends Component{
                             <CreateFolder 
                             show= {this.state.showModel}
                             onHide = {closeModel}
+
+                            
                             />
+
                             </ButtonToolbar>
 
                     </div>

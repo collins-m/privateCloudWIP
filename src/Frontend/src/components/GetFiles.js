@@ -1,37 +1,42 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-
-const token = localStorage.usertoken
+import {Button, ButtonToolbar} from 'react-bootstrap'
+import ShareFile from './ShareFile' //how to get function from different file
+import CreateFolder from './CreateFolder'
 
 class GetFiles extends Component{
     state = {
         files:[], 
         isLoading: null,
-        errors:null
+        errors:null,
+        showModel: false //false initially because we don't want to show it initially
     };
     
     async deleteFile(id){
-      let s = '\textFile1.txt'  ;
-        await axios.delete(`/api/file/${id}`, {
-          headers: {
-          'Authorization': token
-          }
-      },
-      { path: s})
-      
-      let files2 = this.state.files
-      for (let i = 0; i < files2.length; i++){
-        let file = file[i]
-        if (file.id === id){
-          files2.slice(i, 1)
-          break; 
-        }
-      }
-      this.setState({files:files2});
+      //const formdata = new FormData();
 
-      this.props.history.push(`/upload`) //redirect back to page
+     // formdata.append('path', "/textFile.txt");
+      const token = localStorage.usertoken; 
+
+      let config = { 
+        headers: {
+            Authorization: token
+        },
+        data: { //! Take note of the `data` keyword. This is the request body.
+            path: '/textFile.txt'
+             //! more `key: value` pairs as desired.
+        } 
+      }
+     
+      await axios.delete('/api/file/{id}', config)
+      
+      console.log("Done!"); 
+      
+      //this.props.history.push(`/upload`) //redirect back to page
     }
     componentDidMount() {
+       const token =  localStorage.usertoken; 
+
         axios
           .get('/api/file/',{
             headers: {
@@ -39,6 +44,7 @@ class GetFiles extends Component{
             }
         })
           .then(response =>
+            
             response.data.files.map(file => ({
               id: `${file.id}`,
               filename: `${file.filename}`,
@@ -53,11 +59,14 @@ class GetFiles extends Component{
               files,
               isLoading: false
             });
+            console.log()
           })
           .catch(error => this.setState({ error, isLoading: false }));
     }
     render() {
         const { isLoading, files } = this.state;
+        let closeModel = () => this.setState({showModel: false}); //on the event of a close button, it will be false
+
         return (
           <React.Fragment>
             <h2>List of Files</h2>
@@ -66,10 +75,10 @@ class GetFiles extends Component{
                 files.map(file => {
                   const { id, filename, path, favourite, accessList } = file;
                   return (
-                    <div key={id}>
-                      <p>{id}</p>
+                    <div key={filename}>
+                      <p>{filename}</p>
                       <div>
-                      <p>{"path" + path}</p>
+                     
                       </div>
                       <div class="dropdown">
                           <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -79,11 +88,40 @@ class GetFiles extends Component{
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li><a href="#">Move</a></li>
                             <li><a href="#" onClick= {this.deleteFile.bind(id)}>Delete</a></li>
-                            <li><a href="#">Share with a friend</a></li>
                             <li role="separator" class="divider"></li>
                           </ul>
+                          
+
                       </div>
+                     
                       <hr />
+                      <ButtonToolbar>
+                              <Button
+                              variant= 'primary'
+                              onClick={()=> this.setState({showModel:true})}
+                              >Share</Button>
+                                
+                            <ShareFile 
+                            show= {this.state.showModel}
+                            onHide = {closeModel}
+                            />
+
+                            <Button
+                             
+                              variant= 'Lime'
+                              onClick={()=> this.setState({showModel:true})}
+                              >Download</Button>
+                                
+                            <CreateFolder 
+                            show= {this.state.showModel}
+                            onHide = {closeModel}
+
+                            
+                            />
+                
+                    
+                            </ButtonToolbar>
+
                     </div>
 
                   );
@@ -92,6 +130,7 @@ class GetFiles extends Component{
                 <p>Loading...</p>
               )}
            </div>
+           
           </React.Fragment>
         );
       }

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom'
+import './styles.css'
 //withRouter is used to push states in application
 class Navigation extends Component{
     //Logout will accept an event object 
@@ -13,7 +14,7 @@ class Navigation extends Component{
         //two different groups of unordered lists
         //first containing login and register
         const loginRegLink = (
-            <ul className="navbar-nav">
+            <ul className="menu-item">
                 <li className="nav-item">
                     <Link to="/logon" className ="nav-link">
                         Login
@@ -28,7 +29,7 @@ class Navigation extends Component{
         )
         //next group of unordered list for profile
         const userLink = (
-            <ul className="navbar-nav">
+            <ul className="menu-item">
                 <li className="nav-item">
                     <Link to="/userprofile" className ="nav-link">
                         User
@@ -44,7 +45,7 @@ class Navigation extends Component{
                         View Files
                     </a>
                 </li>
-                <li className="nav-item">
+                <li className="menu-item">
                     <a href="" onClick={this.logOut.bind(this)} className ="nav-link">
                         Logout
                     </a>
@@ -54,7 +55,7 @@ class Navigation extends Component{
         )// logOut function to call logOut function above
 
         return(
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+            <nav className="">
                 <button className="navbar-toggler"
                     type="button"
                     data-toggle="collapse"

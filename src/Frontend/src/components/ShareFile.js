@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {Modal, Button, Row, Col, Form} from 'react-bootstrap'; 
 import axios from 'axios';
 
-export class ShareFile extends Component{
+
+ class ShareFile extends Component{
     constructor(props){
         super(props);
     }
@@ -75,3 +76,4 @@ export class ShareFile extends Component{
                 );
               }
     }
+export default ShareFile;

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Modal, Button, Row, Col, Form} from 'react-bootstrap'; 
 import axios from 'axios';
 
-class CreateFolder extends Component{
+export class ShareFolder extends Component{
     constructor(props){
         super(props);
     }
@@ -17,9 +17,10 @@ class CreateFolder extends Component{
                 Authorization: token
             },
         }
-        await axios.post('/api/folder/create', { //! Take note of the `data` keyword. This is the request body.
-        folderName: event.target.Folder.value,
-        path: '/folder1'
+        
+        await axios.put('/api/file/5ebd4af3258ef512c5890a77/share', { //! Take note of the `data` keyword. This is the request body.
+        path: '/textFile.txt',
+        user: event.target.Email.value
          //! more `key: value` pairs as desired.
     }, config)
         .then(response=> response.json())
@@ -40,7 +41,7 @@ class CreateFolder extends Component{
                   >
                     <Modal.Header closeButton>
                       <Modal.Title id="contained-modal-title-vcenter">
-                        Create Folder
+                        Add address
                       </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
@@ -48,17 +49,17 @@ class CreateFolder extends Component{
                       <Row> 
                         <Col sm={6}>
                         <Form onSubmit={this.handleSubmit}>
-                        <Form.Group controlId= "Folder">
-                        <Form.Label>"Please add folder name"</Form.Label>
+                        <Form.Group controlId= "Email">
+                        <Form.Label>"Email"</Form.Label>
                         <Form.Control
                             type = "text"
-                            name = "Folder"
+                            name = "Email"
                             required
-                            placeholder="Folder"
+                            placeholder="Email"
                         />
                         </Form.Group>
                         <Form.Group>
-                            <Button variant= "primary" type = "submit"> Create </Button>
+                            <Button variant= "primary" type = "submit"> Send </Button>
                         </Form.Group>
                         </Form>
                         </Col>
@@ -68,10 +69,9 @@ class CreateFolder extends Component{
                     </Modal.Body>
 
                     <Modal.Footer>
-                      <Button varient="danger" onClick={this.props.onHide}>Cancel</Button>
+                      <Button varient="danger" onClick={this.props.onHide}>Close</Button>
                     </Modal.Footer>
                   </Modal>
                 );
               }
     }
-export default CreateFolder;
