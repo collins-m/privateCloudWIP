@@ -5,7 +5,7 @@ import { AppContainer } from 'react-hot-loader';
 import {BrowserRouter as Router} from 'react-router-dom'
 import App from './components/App';
 
-const root = document.getElementById('root');
+const root = document.getElementById('app-container');
 
 const renderApp = () => {
   ReactDOM.render(
