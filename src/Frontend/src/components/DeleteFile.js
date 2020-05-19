@@ -23,7 +23,7 @@ import axios from 'axios';
               Authorization: token
           },
           data: { //! Take note of the `data` keyword. This is the request body.
-              path: '/textFile.txt'
+              path: this.props.path
                //! more `key: value` pairs as desired.
           } 
         }
