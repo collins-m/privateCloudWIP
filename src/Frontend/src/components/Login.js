@@ -1,13 +1,18 @@
 import React, {Component} from 'react'
-import {logon} from './UserFunctions'
+import {login} from './UserFunctions'
+import store from 'store';
+import isLoggedIn from '../helpers/is_logged_in'
+import {Redirect} from 'react-router-dom'; 
+import styles from './styles.css';
 
-class SignIn extends Component{
+class Login extends Component{
     //initialising the values of the state
     constructor(){
         super()
         this.state = {
             email: '', 
             password: '', 
+            error: false,
         } 
         
         this.onChange = this.onChange.bind(this)
@@ -20,22 +25,29 @@ class SignIn extends Component{
 
     onSubmit(e){
         e.preventDefault() //prevent form from submitting default
-
+        const {history} = this.props; 
+        
         const user = { //Update new values in state
             email: this.state.email,
             password: this.state.password
         }
+        this.setState({ error: false });
 
-        logon(user).then(res => {
+        login(user).then(res => {
             if(res){
+                store.set('loggedIn', true);
                 this.props.history.push('/userprofile')
             }
         })
+
     }
 //form on screen
     render() {
+        if (isLoggedIn()){
+            return <Redirect to = "/userprofile"/>
+        }
         return (
-            <div className="container">
+            <div className="login-form">
                 <div className="row"> 
                     <div className= "col-md-6 mt-5 mx-auto">
                         <form noValidate onSubmit={this.onSubmit}>
@@ -69,4 +81,4 @@ class SignIn extends Component{
     }
 }
 
-export default SignIn
+export default Login

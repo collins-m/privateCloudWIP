@@ -1,6 +1,6 @@
 import axios from 'axios'
 //use axios libraries to post 
-export const registration = newUser => {
+export const register = newUser => {
     return axios
     .post('/api/user/register', {
         firstname: newUser.firstname, 
@@ -13,7 +13,7 @@ export const registration = newUser => {
     })
 }
 //Post to authenticate user in backend
-export const logon = user => {
+export const login = user => {
     return axios    
 .post('/api/user/authenticate', {
         email: user.email, 

@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
-import {registration} from './UserFunctions'
+import {register} from './UserFunctions'
+import styles from './styles.css';
 
-class Registration extends Component{
+class Register extends Component{
     constructor(){
         super()
         this.state = {
@@ -28,8 +29,8 @@ class Registration extends Component{
             password: this.state.password
         }
 
-        registration(NUser).then(res => {
-            this.props.history.push('/logon') //will show logon component
+        register(NUser).then(res => {
+            this.props.history.push('/login') //will show logon component
         })
     }
 //Display on screen
@@ -87,4 +88,4 @@ class Registration extends Component{
     }
 }
 
-export default Registration //export so other js files can see
+export default Register //export so other js files can see
